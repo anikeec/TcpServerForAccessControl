@@ -11,31 +11,6 @@
 
 	<context:property-placeholder/>
 
-	<!-- Client side 
-
-	<int:gateway id="gw"
-				 service-interface="org.springframework.integration.samples.tcpclientserver.SimpleGateway"
-				 default-request-channel="input"/>
-
-	<int-ip:tcp-connection-factory id="client"
-								   type="client"
-								   host="localhost"
-								   port="#{crLfServer.port}"
-								   single-use="true"
-								   so-timeout="10000"/>
-
-	<int:channel id="input"/>
-
-	<int-ip:tcp-outbound-gateway id="outGateway"
-								 request-channel="input"
-								 reply-channel="clientBytes2StringChannel"
-								 connection-factory="client"
-								 request-timeout="10000"
-								 reply-timeout="10000"/>
-
-	<int:object-to-string-transformer id="clientBytes2String"
-									  input-channel="clientBytes2StringChannel"/>
-	-->
 	<!-- Server side -->
 
 	<int-ip:tcp-connection-factory id="crLfServer"
