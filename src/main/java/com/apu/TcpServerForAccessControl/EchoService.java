@@ -15,6 +15,9 @@
  */
 package com.apu.TcpServerForAccessControl;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * Simple service that receives data in a byte array,
  * converts it to a String and appends it to 'echo:'.
@@ -23,11 +26,14 @@ package com.apu.TcpServerForAccessControl;
  *
  */
 public class EchoService {
+    
+    private static final Logger logger = LogManager.getLogger(EchoService.class);
 
     public String test(String input) {
         if ("FAIL".equals(input)) {
             throw new RuntimeException("Failure Demonstration");
         }
+        logger.debug("input packet: " + input);
         return "echo:" + input;
     }
 
