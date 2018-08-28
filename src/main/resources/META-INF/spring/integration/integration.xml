@@ -51,14 +51,59 @@
                                       input-channel="serverBytes2StringChannel"
                                       output-channel="toSA"/>								
 
-	<int:channel id="toSA"/>
+	<int:channel id="toSA">
+	   <int:interceptors>
+	       <int:wire-tap channel="toLogging"/> 
+	   </int:interceptors>
+	</int:channel>
+		
+	
+	<int:chain input-channel="toSA" output-channel="toEngineChannel">
+	   <int:transformer ref="messageChecker" method="check"/>
+	   <int:transformer ref="messageDecoder" method="decode"/>
+	 </int:chain>
+	
+	<bean id="messageChecker"
+          class="com.apu.TcpServerForAccessControl.utils.message.MessageChecker"/>
+	
+	<bean id="messageDecoder"
+          class="com.apu.TcpServerForAccessControl.utils.message.MessageDecoder"/>
+	
+	
+	<int:publish-subscribe-channel id="toEngineChannel" apply-sequence="true"/><!--  -->
+	
+	<int:service-activator input-channel="toEngineChannel"
+                           ref="serviceRulesEngine"
+                           method="engine"
+                           order="2"/>
+                           
+    <int:service-activator input-channel="toEngineChannel"
+                           ref="infoRulesEngine"
+                           method="engine"
+                           order="1"/>
+	
+	<bean id="serviceRulesEngine"
+          class="com.apu.TcpServerForAccessControl.utils.engine.ServiceRulesEngine"/>
+	
+	<bean id="infoRulesEngine"
+          class="com.apu.TcpServerForAccessControl.utils.engine.InfoRulesEngine"/>	
+         
+          
+    <int:channel id="toLogging"/>
+    
+    <int:service-activator input-channel="toLogging"
+                           ref="logWriter"
+                           method="writeToLog"/>
+                           
+    <bean id="logWriter"
+          class="com.apu.TcpServerForAccessControl.utils.logging.LogWriter"/>
 
-	<int:service-activator input-channel="toSA"
-						   ref="echoService"
-						   method="test"/>
+<!-- 	<int:service-activator input-channel="toLogging" -->
+<!-- 						   ref="echoService" -->
+<!-- 						   method="test"/> -->
 
-	<bean id="echoService"
-		  class="com.apu.TcpServerForAccessControl.EchoService"/>
+<!-- 	<bean id="echoService" -->
+<!-- 		  class="com.apu.TcpServerForAccessControl.EchoService"/> -->
 
 	<int:transformer id="errorHandler"
 					 input-channel="errorChannel"
