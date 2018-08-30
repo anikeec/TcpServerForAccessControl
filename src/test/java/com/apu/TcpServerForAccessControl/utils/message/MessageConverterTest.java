@@ -8,14 +8,19 @@ import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.apu.TcpServerForAccessControlAPI.packet.InfoPacket;
 import com.apu.TcpServerForAccessControlAPI.packet.RawPacket;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = {"/META-INF/spring/integration/integration.xml"})
 public class MessageConverterTest {
     
-    private byte[] serializePacket(RawPacket srcPacket) {
-        String ret;   
+    private byte[] serializePacket(RawPacket srcPacket) {   
         byte[] resultBytes = null;
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ObjectOutput out = null;
@@ -24,33 +29,32 @@ public class MessageConverterTest {
             out.writeObject(srcPacket);
             out.flush();
             resultBytes = bos.toByteArray();
-            ret = new String(resultBytes);
         } catch (IOException ex) {
-            ret = null;
         } finally {
             try {
                 bos.close();
             } catch (IOException ex) {
-                ret = null;
             }
         }        
         return resultBytes;
     }
+    
+    @Autowired
+    MessageConverter mc;
 
     @Test
     public void testConvert() {
         RawPacket srcPacket = new InfoPacket();
         srcPacket.setDeviceId(2);
         srcPacket.setPacketNumber(5);
-        //fill packet
         
-        byte[] srcPacketStr = serializePacket(srcPacket);
+        byte[] srcPacketStr = serializePacket(srcPacket);        
+        RawPacket resultPacket = mc.convert(srcPacketStr);       
         
-        MessageConverter mc = new MessageConverter();
-        RawPacket resultPacket = mc.convert(srcPacketStr);        
-        
-        
-        assertTrue(resultPacket.equals(srcPacket));
+        assertTrue(
+                (resultPacket.getDeviceId().equals(srcPacket.getDeviceId())) &&
+                (resultPacket.getPacketNumber().equals(srcPacket.getPacketNumber()))
+                );
     }
 
 }
