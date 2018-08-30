@@ -9,14 +9,11 @@ public class LogWriter {
     
     private static final Logger logger = LogManager.getLogger(LogWriter.class);
     
-    public String writeToLog(String message) {
+    public void writeToLog(byte[] message) {
         String msg = null;
-        if(message.equals("info") || message.equals("service"))
-            msg = null;
-        else
-            msg = "Logger Message: " + message;
+        msg = "Logger Message: " + message;
         logger.info(msg);
-        return msg;
+//        return msg;
     }
 
 }

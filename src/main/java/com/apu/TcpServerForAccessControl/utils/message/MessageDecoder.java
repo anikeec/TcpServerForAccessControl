@@ -9,7 +9,7 @@ public class MessageDecoder {
     
     private static final Logger logger = LogManager.getLogger(MessageDecoder.class);
     
-    public String decode(String message) {
+    public byte[] decode(byte[] message) {
         logger.info("Message: " + message);
         return message;
     }

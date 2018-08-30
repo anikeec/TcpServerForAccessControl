@@ -19,12 +19,8 @@
 
 	<int-ip:tcp-inbound-gateway id="gatewayCrLf"
 								connection-factory="crLfServer"
-								request-channel="serverBytes2StringChannel"
+								request-channel="toSA"
 								error-channel="errorChannel"/>
-								
-    <int:object-to-string-transformer id="serverBytes2String"
-                                      input-channel="serverBytes2StringChannel"
-                                      output-channel="toSA"/>								
 
 	<int:channel id="toSA">
 	   <int:interceptors>

@@ -9,7 +9,7 @@ public class MessageChecker {
     
     private static final Logger logger = LogManager.getLogger(MessageChecker.class);
     
-    public String check(String message) {
+    public byte[] check(byte[] message) {
         logger.info("Message: " + message);
         return message;
     }
