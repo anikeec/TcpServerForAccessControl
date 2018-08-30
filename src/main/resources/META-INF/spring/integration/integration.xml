@@ -36,6 +36,7 @@
 	<int:chain input-channel="toSA" output-channel="toEngineChannel">
 	   <int:transformer ref="messageChecker" method="check"/>
 	   <int:transformer ref="messageDecoder" method="decode"/>
+	   <int:transformer ref="messageConverter" method="convert"/>
 	 </int:chain>
 	
 	<bean id="messageChecker"
@@ -43,6 +44,9 @@
 	
 	<bean id="messageDecoder"
           class="com.apu.TcpServerForAccessControl.utils.message.MessageDecoder"/>
+          
+    <bean id="messageConverter"
+          class="com.apu.TcpServerForAccessControl.utils.message.MessageConverter"/>
 	
 	
 	<int:publish-subscribe-channel id="toEngineChannel" apply-sequence="true"/><!--  -->

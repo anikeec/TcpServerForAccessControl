@@ -4,15 +4,19 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 
+import com.apu.TcpServerForAccessControlAPI.packet.MessageType;
+import com.apu.TcpServerForAccessControlAPI.packet.RawPacket;
+
 @Component
 public class InfoRulesEngine {
     
     private static final Logger logger = LogManager.getLogger(InfoRulesEngine.class);
     
-    public String engine(String message) {
+    public String engine(RawPacket message) {
         String msg = null;
-        if(message.equals("info"))
-            msg = "InfoRulesEngine answer - Message: " + message;
+        if(message.getMessageType().equals(MessageType.INFO))
+            return null;
+        msg = "InfoRulesEngine answer - PacketType: " + message.getMessageType();
         logger.info(msg);
         return msg;
     }
