@@ -20,6 +20,24 @@ import com.apu.TcpServerForAccessControlAPI.packet.RawPacket;
 @ContextConfiguration(locations = {"/META-INF/spring/integration/integration.xml"})
 public class MessageConverterTest {
     
+    @Autowired
+    MessageConverter mc;
+
+    @Test
+    public void testConvert() {
+        RawPacket srcPacket = new InfoPacket();
+        srcPacket.setDeviceId(2);
+        srcPacket.setPacketNumber(5);
+        
+        byte[] srcPacketStr = serializePacket(srcPacket);        
+        RawPacket resultPacket = mc.convert(srcPacketStr);       
+        
+        assertTrue(
+                (resultPacket.getDeviceId().equals(srcPacket.getDeviceId())) &&
+                (resultPacket.getPacketNumber().equals(srcPacket.getPacketNumber()))
+                );
+    }
+    
     private byte[] serializePacket(RawPacket srcPacket) {   
         byte[] resultBytes = null;
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -37,24 +55,6 @@ public class MessageConverterTest {
             }
         }        
         return resultBytes;
-    }
-    
-    @Autowired
-    MessageConverter mc;
-
-    @Test
-    public void testConvert() {
-        RawPacket srcPacket = new InfoPacket();
-        srcPacket.setDeviceId(2);
-        srcPacket.setPacketNumber(5);
-        
-        byte[] srcPacketStr = serializePacket(srcPacket);        
-        RawPacket resultPacket = mc.convert(srcPacketStr);       
-        
-        assertTrue(
-                (resultPacket.getDeviceId().equals(srcPacket.getDeviceId())) &&
-                (resultPacket.getPacketNumber().equals(srcPacket.getPacketNumber()))
-                );
     }
 
 }
