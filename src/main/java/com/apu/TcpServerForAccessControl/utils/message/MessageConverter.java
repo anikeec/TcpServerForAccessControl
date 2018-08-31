@@ -1,9 +1,12 @@
 package com.apu.TcpServerForAccessControl.utils.message;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.logging.log4j.LogManager;
@@ -32,6 +35,18 @@ public class MessageConverter {
         return pkt;
     }
     
+    public byte[] convertBack(RawPacket packet) {
+        byte[] packetBytes = new byte[0];
+        try {
+            packetBytes = serializePacket(packet);
+        } catch(IOException e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
+        }
+        
+//        logger.info("Message: " + message);
+        return packetBytes;
+    }
+    
     private RawPacket deserialize(byte[] srcPacketStr) throws ClassNotFoundException, IOException {
         RawPacket resultPacket = null;
         ByteArrayInputStream bis = new ByteArrayInputStream(srcPacketStr);
@@ -54,6 +69,24 @@ public class MessageConverter {
                 }
         }
         return resultPacket;
+    }
+    
+    private static byte[] serializePacket(RawPacket srcPacket) throws IOException {   
+        byte[] resultBytes = null;
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ObjectOutput out = null;
+        try {
+            out = new ObjectOutputStream(bos);   
+            out.writeObject(srcPacket);
+            out.flush();
+            resultBytes = bos.toByteArray();
+        } finally {
+            try {
+                bos.close();
+            } catch (IOException ex) {
+            }
+        }        
+        return resultBytes;
     }
 
 }

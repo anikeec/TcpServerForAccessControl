@@ -13,7 +13,7 @@ public class InfoRulesEngine {
     
     private static final Logger logger = LogManager.getLogger(InfoRulesEngine.class);
     
-    public byte[] engine(RawPacket message) {
+    public RawPacket engine(RawPacket message) {
         if(!(message instanceof InfoPacket))
             return null;
         if(!message.getMessageType().equals(MessageType.INFO))
@@ -22,7 +22,7 @@ public class InfoRulesEngine {
         String msg;
         msg = "InfoRulesEngine answer - PacketType: " + message.getMessageType();
         logger.info(msg);
-        return msg.getBytes();
+        return message;
     }
 
 }

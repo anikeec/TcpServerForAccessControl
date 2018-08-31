@@ -10,26 +10,39 @@
 		http://www.springframework.org/schema/integration/ip http://www.springframework.org/schema/integration/ip/spring-integration-ip.xsd">
 
 	<context:property-placeholder/>
-
+                                 
 	<!-- Server side -->
 
 	<int-ip:tcp-connection-factory id="crLfServer"
 								   type="server"
 								   port="65530"/>
+    
+    <int-ip:tcp-outbound-channel-adapter id="outboundServer"
+        channel="tcpOutputChannel"
+        connection-factory="crLfServer"/>
+        
+    <int:channel id="tcpOutputChannel"/>
+    
+    <int:chain input-channel="toTcpClient" output-channel="tcpOutputChannel">
+        <int:transformer ref="messageConverter" method="convertBack"/>
+       <int:transformer ref="messageDecoder" method="encode"/>       
+    </int:chain>
+     
+    <int:channel id="toTcpClient"/>  
+        
+	
+	<int-ip:tcp-inbound-channel-adapter id="inboundServer"
+	    channel="tcpInputChannel"
+	    connection-factory="crLfServer"/>
 
-	<int-ip:tcp-inbound-gateway id="gatewayCrLf"
-								connection-factory="crLfServer"
-								request-channel="toSA"
-								error-channel="errorChannel"/>
-
-	<int:channel id="toSA">
+	<int:channel id="tcpInputChannel">
 	   <int:interceptors>
 	       <int:wire-tap channel="toLogging"/> 
 	   </int:interceptors>
 	</int:channel>
 		
 	
-	<int:chain input-channel="toSA" output-channel="toEngineChannel">
+	<int:chain input-channel="tcpInputChannel" output-channel="toEngineChannel">
 	   <int:transformer ref="messageChecker" method="check"/>
 	   <int:transformer ref="messageDecoder" method="decode"/>
 	   <int:transformer ref="messageConverter" method="convert"/>
@@ -45,14 +58,28 @@
           class="com.apu.TcpServerForAccessControl.utils.message.MessageConverter"/>
 	
 	
-	<int:publish-subscribe-channel id="toEngineChannel" apply-sequence="true"/><!--  -->
+<!-- 	<int:publish-subscribe-channel id="toEngineChannel" apply-sequence="true"/> -->
 	
-	<int:service-activator input-channel="toEngineChannel"
+	
+	<int:payload-type-router input-channel="toEngineChannel">
+	    <int:mapping type="com.apu.TcpServerForAccessControlAPI.packet.ServicePacket" channel="toServiceEngineChannel" />
+	    <int:mapping type="com.apu.TcpServerForAccessControlAPI.packet.InfoPacket" channel="toInfoEngineChannel" />
+	</int:payload-type-router>
+	
+	
+	<int:channel id="toServiceEngineChannel"/>
+	
+	<int:service-activator input-channel="toServiceEngineChannel"
+	                       output-channel="toTcpClient"
                            ref="serviceRulesEngine"
                            method="engine"
                            order="2"/>
                            
-    <int:service-activator input-channel="toEngineChannel"
+    
+    <int:channel id="toInfoEngineChannel"/>
+                           
+    <int:service-activator input-channel="toInfoEngineChannel"
+                           output-channel="toTcpClient"
                            ref="infoRulesEngine"
                            method="engine"
                            order="1"/>

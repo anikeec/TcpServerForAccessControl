@@ -13,7 +13,7 @@ public class ServiceRulesEngine {
     
     private static final Logger logger = LogManager.getLogger(ServiceRulesEngine.class);
     
-    public byte[] engine(RawPacket message) {
+    public RawPacket engine(RawPacket message) {
         if(!(message instanceof ServicePacket))
             return null;
         if(!message.getMessageType().equals(MessageType.SERVICE))
@@ -22,7 +22,7 @@ public class ServiceRulesEngine {
         String msg;        
         msg = "ServiceRulesEngine answer - PacketType: " + message.getMessageType();
         logger.info(msg);
-        return msg.getBytes();
+        return message;
     }
 
 }

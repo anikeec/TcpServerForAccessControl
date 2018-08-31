@@ -13,5 +13,10 @@ public class MessageDecoder {
         logger.info("Message: " + message);
         return message;
     }
+    
+    public byte[] encode(byte[] message) {
+        logger.info("Message to encode: " + message);
+        return message;
+    }
 
 }
