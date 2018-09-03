@@ -31,13 +31,13 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author apu
  */
 @Entity
-@Table(name = "cards")
+@Table(name = "card")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Cards.findAll", query = "SELECT c FROM Cards c")
-    , @NamedQuery(name = "Cards.findByCardID", query = "SELECT c FROM Cards c WHERE c.cardID = :cardID")
-    , @NamedQuery(name = "Cards.findByCardNumber", query = "SELECT c FROM Cards c WHERE c.cardNumber = :cardNumber")})
-public class Cards implements Serializable {
+    @NamedQuery(name = "Card.findAll", query = "SELECT c FROM Card c")
+    , @NamedQuery(name = "Card.findByCardID", query = "SELECT c FROM Card c WHERE c.cardID = :cardID")
+    , @NamedQuery(name = "Card.findByCardNumber", query = "SELECT c FROM Card c WHERE c.cardNumber = :cardNumber")})
+public class Card implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -50,22 +50,22 @@ public class Cards implements Serializable {
     @Size(min = 1, max = 255)
     @Column(name = "cardNumber")
     private String cardNumber;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cardID", fetch = FetchType.EAGER)
+    private Collection<AccessMessage> accessMessageCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cardID", fetch = FetchType.EAGER)
+    private Collection<Rule> ruleCollection;
     @JoinColumn(name = "userID", referencedColumnName = "userId")
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private Users userID;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cardID", fetch = FetchType.EAGER)
-    private Collection<AccessMessages> accessMessagesCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cardID", fetch = FetchType.EAGER)
-    private Collection<Rules> rulesCollection;
+    private User userID;
 
-    public Cards() {
+    public Card() {
     }
 
-    public Cards(Integer cardID) {
+    public Card(Integer cardID) {
         this.cardID = cardID;
     }
 
-    public Cards(Integer cardID, String cardNumber) {
+    public Card(Integer cardID, String cardNumber) {
         this.cardID = cardID;
         this.cardNumber = cardNumber;
     }
@@ -86,30 +86,30 @@ public class Cards implements Serializable {
         this.cardNumber = cardNumber;
     }
 
-    public Users getUserID() {
+    @XmlTransient
+    public Collection<AccessMessage> getAccessMessageCollection() {
+        return accessMessageCollection;
+    }
+
+    public void setAccessMessageCollection(Collection<AccessMessage> accessMessageCollection) {
+        this.accessMessageCollection = accessMessageCollection;
+    }
+
+    @XmlTransient
+    public Collection<Rule> getRuleCollection() {
+        return ruleCollection;
+    }
+
+    public void setRuleCollection(Collection<Rule> ruleCollection) {
+        this.ruleCollection = ruleCollection;
+    }
+
+    public User getUserID() {
         return userID;
     }
 
-    public void setUserID(Users userID) {
+    public void setUserID(User userID) {
         this.userID = userID;
-    }
-
-    @XmlTransient
-    public Collection<AccessMessages> getAccessMessagesCollection() {
-        return accessMessagesCollection;
-    }
-
-    public void setAccessMessagesCollection(Collection<AccessMessages> accessMessagesCollection) {
-        this.accessMessagesCollection = accessMessagesCollection;
-    }
-
-    @XmlTransient
-    public Collection<Rules> getRulesCollection() {
-        return rulesCollection;
-    }
-
-    public void setRulesCollection(Collection<Rules> rulesCollection) {
-        this.rulesCollection = rulesCollection;
     }
 
     @Override
@@ -122,10 +122,10 @@ public class Cards implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Cards)) {
+        if (!(object instanceof Card)) {
             return false;
         }
-        Cards other = (Cards) object;
+        Card other = (Card) object;
         if ((this.cardID == null && other.cardID != null) || (this.cardID != null && !this.cardID.equals(other.cardID))) {
             return false;
         }
@@ -134,7 +134,7 @@ public class Cards implements Serializable {
 
     @Override
     public String toString() {
-        return "com.apu.TcpServerForAccessControl.entity.Cards[ cardID=" + cardID + " ]";
+        return "com.apu.TcpServerForAccessControl.entity.Card[ cardID=" + cardID + " ]";
     }
     
 }

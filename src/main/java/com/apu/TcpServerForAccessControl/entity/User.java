@@ -29,16 +29,16 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author apu
  */
 @Entity
-@Table(name = "users")
+@Table(name = "user")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Users.findAll", query = "SELECT u FROM Users u")
-    , @NamedQuery(name = "Users.findByUserId", query = "SELECT u FROM Users u WHERE u.userId = :userId")
-    , @NamedQuery(name = "Users.findByFirstName", query = "SELECT u FROM Users u WHERE u.firstName = :firstName")
-    , @NamedQuery(name = "Users.findBySecondName", query = "SELECT u FROM Users u WHERE u.secondName = :secondName")
-    , @NamedQuery(name = "Users.findByPhoneNumber", query = "SELECT u FROM Users u WHERE u.phoneNumber = :phoneNumber")
-    , @NamedQuery(name = "Users.findByEmail", query = "SELECT u FROM Users u WHERE u.email = :email")})
-public class Users implements Serializable {
+    @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u")
+    , @NamedQuery(name = "User.findByUserId", query = "SELECT u FROM User u WHERE u.userId = :userId")
+    , @NamedQuery(name = "User.findByFirstName", query = "SELECT u FROM User u WHERE u.firstName = :firstName")
+    , @NamedQuery(name = "User.findBySecondName", query = "SELECT u FROM User u WHERE u.secondName = :secondName")
+    , @NamedQuery(name = "User.findByPhoneNumber", query = "SELECT u FROM User u WHERE u.phoneNumber = :phoneNumber")
+    , @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email = :email")})
+public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -68,16 +68,16 @@ public class Users implements Serializable {
     @Column(name = "email")
     private String email;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userID", fetch = FetchType.EAGER)
-    private Collection<Cards> cardsCollection;
+    private Collection<Card> cardCollection;
 
-    public Users() {
+    public User() {
     }
 
-    public Users(Integer userId) {
+    public User(Integer userId) {
         this.userId = userId;
     }
 
-    public Users(Integer userId, String firstName, String secondName, String phoneNumber, String email) {
+    public User(Integer userId, String firstName, String secondName, String phoneNumber, String email) {
         this.userId = userId;
         this.firstName = firstName;
         this.secondName = secondName;
@@ -126,12 +126,12 @@ public class Users implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Cards> getCardsCollection() {
-        return cardsCollection;
+    public Collection<Card> getCardCollection() {
+        return cardCollection;
     }
 
-    public void setCardsCollection(Collection<Cards> cardsCollection) {
-        this.cardsCollection = cardsCollection;
+    public void setCardCollection(Collection<Card> cardCollection) {
+        this.cardCollection = cardCollection;
     }
 
     @Override
@@ -144,10 +144,10 @@ public class Users implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Users)) {
+        if (!(object instanceof User)) {
             return false;
         }
-        Users other = (Users) object;
+        User other = (User) object;
         if ((this.userId == null && other.userId != null) || (this.userId != null && !this.userId.equals(other.userId))) {
             return false;
         }
@@ -156,7 +156,7 @@ public class Users implements Serializable {
 
     @Override
     public String toString() {
-        return "com.apu.TcpServerForAccessControl.entity.Users[ userId=" + userId + " ]";
+        return "com.apu.TcpServerForAccessControl.entity.User[ userId=" + userId + " ]";
     }
     
 }

@@ -33,14 +33,14 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author apu
  */
 @Entity
-@Table(name = "rules")
+@Table(name = "rule")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Rules.findAll", query = "SELECT r FROM Rules r")
-    , @NamedQuery(name = "Rules.findByRuleID", query = "SELECT r FROM Rules r WHERE r.ruleID = :ruleID")
-    , @NamedQuery(name = "Rules.findByDateBegin", query = "SELECT r FROM Rules r WHERE r.dateBegin = :dateBegin")
-    , @NamedQuery(name = "Rules.findByDateEnd", query = "SELECT r FROM Rules r WHERE r.dateEnd = :dateEnd")})
-public class Rules implements Serializable {
+    @NamedQuery(name = "Rule.findAll", query = "SELECT r FROM Rule r")
+    , @NamedQuery(name = "Rule.findByRuleID", query = "SELECT r FROM Rule r WHERE r.ruleID = :ruleID")
+    , @NamedQuery(name = "Rule.findByDateBegin", query = "SELECT r FROM Rule r WHERE r.dateBegin = :dateBegin")
+    , @NamedQuery(name = "Rule.findByDateEnd", query = "SELECT r FROM Rule r WHERE r.dateEnd = :dateEnd")})
+public class Rule implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -58,26 +58,26 @@ public class Rules implements Serializable {
     @Column(name = "DateEnd")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateEnd;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ruleID", fetch = FetchType.EAGER)
-    private Collection<EventMessages> eventMessagesCollection;
     @JoinColumn(name = "cardID", referencedColumnName = "cardID")
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private Cards cardID;
+    private Card cardID;
     @JoinColumn(name = "devideID", referencedColumnName = "deviceID")
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private Devices devideID;
+    private Device devideID;
     @JoinColumn(name = "ruleTypeID", referencedColumnName = "ruleTypeId")
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private RulesTypes ruleTypeID;
+    private RulesType ruleTypeID;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ruleID", fetch = FetchType.EAGER)
+    private Collection<EventMessage> eventMessageCollection;
 
-    public Rules() {
+    public Rule() {
     }
 
-    public Rules(Integer ruleID) {
+    public Rule(Integer ruleID) {
         this.ruleID = ruleID;
     }
 
-    public Rules(Integer ruleID, Date dateBegin, Date dateEnd) {
+    public Rule(Integer ruleID, Date dateBegin, Date dateEnd) {
         this.ruleID = ruleID;
         this.dateBegin = dateBegin;
         this.dateEnd = dateEnd;
@@ -107,37 +107,37 @@ public class Rules implements Serializable {
         this.dateEnd = dateEnd;
     }
 
-    @XmlTransient
-    public Collection<EventMessages> getEventMessagesCollection() {
-        return eventMessagesCollection;
-    }
-
-    public void setEventMessagesCollection(Collection<EventMessages> eventMessagesCollection) {
-        this.eventMessagesCollection = eventMessagesCollection;
-    }
-
-    public Cards getCardID() {
+    public Card getCardID() {
         return cardID;
     }
 
-    public void setCardID(Cards cardID) {
+    public void setCardID(Card cardID) {
         this.cardID = cardID;
     }
 
-    public Devices getDevideID() {
+    public Device getDevideID() {
         return devideID;
     }
 
-    public void setDevideID(Devices devideID) {
+    public void setDevideID(Device devideID) {
         this.devideID = devideID;
     }
 
-    public RulesTypes getRuleTypeID() {
+    public RulesType getRuleTypeID() {
         return ruleTypeID;
     }
 
-    public void setRuleTypeID(RulesTypes ruleTypeID) {
+    public void setRuleTypeID(RulesType ruleTypeID) {
         this.ruleTypeID = ruleTypeID;
+    }
+
+    @XmlTransient
+    public Collection<EventMessage> getEventMessageCollection() {
+        return eventMessageCollection;
+    }
+
+    public void setEventMessageCollection(Collection<EventMessage> eventMessageCollection) {
+        this.eventMessageCollection = eventMessageCollection;
     }
 
     @Override
@@ -150,10 +150,10 @@ public class Rules implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Rules)) {
+        if (!(object instanceof Rule)) {
             return false;
         }
-        Rules other = (Rules) object;
+        Rule other = (Rule) object;
         if ((this.ruleID == null && other.ruleID != null) || (this.ruleID != null && !this.ruleID.equals(other.ruleID))) {
             return false;
         }
@@ -162,7 +162,7 @@ public class Rules implements Serializable {
 
     @Override
     public String toString() {
-        return "com.apu.TcpServerForAccessControl.entity.Rules[ ruleID=" + ruleID + " ]";
+        return "com.apu.TcpServerForAccessControl.entity.Rule[ ruleID=" + ruleID + " ]";
     }
     
 }

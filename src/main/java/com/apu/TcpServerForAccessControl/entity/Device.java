@@ -28,13 +28,13 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author apu
  */
 @Entity
-@Table(name = "devices")
+@Table(name = "device")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Devices.findAll", query = "SELECT d FROM Devices d")
-    , @NamedQuery(name = "Devices.findByDeviceID", query = "SELECT d FROM Devices d WHERE d.deviceID = :deviceID")
-    , @NamedQuery(name = "Devices.findByLastPacketID", query = "SELECT d FROM Devices d WHERE d.lastPacketID = :lastPacketID")})
-public class Devices implements Serializable {
+    @NamedQuery(name = "Device.findAll", query = "SELECT d FROM Device d")
+    , @NamedQuery(name = "Device.findByDeviceID", query = "SELECT d FROM Device d WHERE d.deviceID = :deviceID")
+    , @NamedQuery(name = "Device.findByLastPacketID", query = "SELECT d FROM Device d WHERE d.lastPacketID = :lastPacketID")})
+public class Device implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -47,22 +47,22 @@ public class Devices implements Serializable {
     @Column(name = "lastPacketID")
     private int lastPacketID;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "deviceID", fetch = FetchType.EAGER)
-    private Collection<EventMessages> eventMessagesCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "deviceID", fetch = FetchType.EAGER)
-    private Collection<AccessMessages> accessMessagesCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "deviceID", fetch = FetchType.EAGER)
-    private Collection<InfoMessages> infoMessagesCollection;
+    private Collection<AccessMessage> accessMessageCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "devideID", fetch = FetchType.EAGER)
-    private Collection<Rules> rulesCollection;
+    private Collection<Rule> ruleCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "deviceID", fetch = FetchType.EAGER)
+    private Collection<EventMessage> eventMessageCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "deviceID", fetch = FetchType.EAGER)
+    private Collection<InfoMessage> infoMessageCollection;
 
-    public Devices() {
+    public Device() {
     }
 
-    public Devices(Integer deviceID) {
+    public Device(Integer deviceID) {
         this.deviceID = deviceID;
     }
 
-    public Devices(Integer deviceID, int lastPacketID) {
+    public Device(Integer deviceID, int lastPacketID) {
         this.deviceID = deviceID;
         this.lastPacketID = lastPacketID;
     }
@@ -84,39 +84,39 @@ public class Devices implements Serializable {
     }
 
     @XmlTransient
-    public Collection<EventMessages> getEventMessagesCollection() {
-        return eventMessagesCollection;
+    public Collection<AccessMessage> getAccessMessageCollection() {
+        return accessMessageCollection;
     }
 
-    public void setEventMessagesCollection(Collection<EventMessages> eventMessagesCollection) {
-        this.eventMessagesCollection = eventMessagesCollection;
-    }
-
-    @XmlTransient
-    public Collection<AccessMessages> getAccessMessagesCollection() {
-        return accessMessagesCollection;
-    }
-
-    public void setAccessMessagesCollection(Collection<AccessMessages> accessMessagesCollection) {
-        this.accessMessagesCollection = accessMessagesCollection;
+    public void setAccessMessageCollection(Collection<AccessMessage> accessMessageCollection) {
+        this.accessMessageCollection = accessMessageCollection;
     }
 
     @XmlTransient
-    public Collection<InfoMessages> getInfoMessagesCollection() {
-        return infoMessagesCollection;
+    public Collection<Rule> getRuleCollection() {
+        return ruleCollection;
     }
 
-    public void setInfoMessagesCollection(Collection<InfoMessages> infoMessagesCollection) {
-        this.infoMessagesCollection = infoMessagesCollection;
+    public void setRuleCollection(Collection<Rule> ruleCollection) {
+        this.ruleCollection = ruleCollection;
     }
 
     @XmlTransient
-    public Collection<Rules> getRulesCollection() {
-        return rulesCollection;
+    public Collection<EventMessage> getEventMessageCollection() {
+        return eventMessageCollection;
     }
 
-    public void setRulesCollection(Collection<Rules> rulesCollection) {
-        this.rulesCollection = rulesCollection;
+    public void setEventMessageCollection(Collection<EventMessage> eventMessageCollection) {
+        this.eventMessageCollection = eventMessageCollection;
+    }
+
+    @XmlTransient
+    public Collection<InfoMessage> getInfoMessageCollection() {
+        return infoMessageCollection;
+    }
+
+    public void setInfoMessageCollection(Collection<InfoMessage> infoMessageCollection) {
+        this.infoMessageCollection = infoMessageCollection;
     }
 
     @Override
@@ -129,10 +129,10 @@ public class Devices implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Devices)) {
+        if (!(object instanceof Device)) {
             return false;
         }
-        Devices other = (Devices) object;
+        Device other = (Device) object;
         if ((this.deviceID == null && other.deviceID != null) || (this.deviceID != null && !this.deviceID.equals(other.deviceID))) {
             return false;
         }
@@ -141,7 +141,7 @@ public class Devices implements Serializable {
 
     @Override
     public String toString() {
-        return "com.apu.TcpServerForAccessControl.entity.Devices[ deviceID=" + deviceID + " ]";
+        return "com.apu.TcpServerForAccessControl.entity.Device[ deviceID=" + deviceID + " ]";
     }
     
 }

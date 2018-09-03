@@ -29,13 +29,13 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author apu
  */
 @Entity
-@Table(name = "rules_types")
+@Table(name = "rules_type")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "RulesTypes.findAll", query = "SELECT r FROM RulesTypes r")
-    , @NamedQuery(name = "RulesTypes.findByRuleTypeId", query = "SELECT r FROM RulesTypes r WHERE r.ruleTypeId = :ruleTypeId")
-    , @NamedQuery(name = "RulesTypes.findByDescription", query = "SELECT r FROM RulesTypes r WHERE r.description = :description")})
-public class RulesTypes implements Serializable {
+    @NamedQuery(name = "RulesType.findAll", query = "SELECT r FROM RulesType r")
+    , @NamedQuery(name = "RulesType.findByRuleTypeId", query = "SELECT r FROM RulesType r WHERE r.ruleTypeId = :ruleTypeId")
+    , @NamedQuery(name = "RulesType.findByDescription", query = "SELECT r FROM RulesType r WHERE r.description = :description")})
+public class RulesType implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -49,16 +49,16 @@ public class RulesTypes implements Serializable {
     @Column(name = "description")
     private String description;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "ruleTypeID", fetch = FetchType.EAGER)
-    private Collection<Rules> rulesCollection;
+    private Collection<Rule> ruleCollection;
 
-    public RulesTypes() {
+    public RulesType() {
     }
 
-    public RulesTypes(Integer ruleTypeId) {
+    public RulesType(Integer ruleTypeId) {
         this.ruleTypeId = ruleTypeId;
     }
 
-    public RulesTypes(Integer ruleTypeId, String description) {
+    public RulesType(Integer ruleTypeId, String description) {
         this.ruleTypeId = ruleTypeId;
         this.description = description;
     }
@@ -80,12 +80,12 @@ public class RulesTypes implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Rules> getRulesCollection() {
-        return rulesCollection;
+    public Collection<Rule> getRuleCollection() {
+        return ruleCollection;
     }
 
-    public void setRulesCollection(Collection<Rules> rulesCollection) {
-        this.rulesCollection = rulesCollection;
+    public void setRuleCollection(Collection<Rule> ruleCollection) {
+        this.ruleCollection = ruleCollection;
     }
 
     @Override
@@ -98,10 +98,10 @@ public class RulesTypes implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof RulesTypes)) {
+        if (!(object instanceof RulesType)) {
             return false;
         }
-        RulesTypes other = (RulesTypes) object;
+        RulesType other = (RulesType) object;
         if ((this.ruleTypeId == null && other.ruleTypeId != null) || (this.ruleTypeId != null && !this.ruleTypeId.equals(other.ruleTypeId))) {
             return false;
         }
@@ -110,7 +110,7 @@ public class RulesTypes implements Serializable {
 
     @Override
     public String toString() {
-        return "com.apu.TcpServerForAccessControl.entity.RulesTypes[ ruleTypeId=" + ruleTypeId + " ]";
+        return "com.apu.TcpServerForAccessControl.entity.RulesType[ ruleTypeId=" + ruleTypeId + " ]";
     }
     
 }

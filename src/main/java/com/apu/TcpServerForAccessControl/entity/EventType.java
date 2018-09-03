@@ -29,13 +29,13 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author apu
  */
 @Entity
-@Table(name = "event_types")
+@Table(name = "event_type")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "EventTypes.findAll", query = "SELECT e FROM EventTypes e")
-    , @NamedQuery(name = "EventTypes.findByEventID", query = "SELECT e FROM EventTypes e WHERE e.eventID = :eventID")
-    , @NamedQuery(name = "EventTypes.findByDescription", query = "SELECT e FROM EventTypes e WHERE e.description = :description")})
-public class EventTypes implements Serializable {
+    @NamedQuery(name = "EventType.findAll", query = "SELECT e FROM EventType e")
+    , @NamedQuery(name = "EventType.findByEventID", query = "SELECT e FROM EventType e WHERE e.eventID = :eventID")
+    , @NamedQuery(name = "EventType.findByDescription", query = "SELECT e FROM EventType e WHERE e.description = :description")})
+public class EventType implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -49,20 +49,20 @@ public class EventTypes implements Serializable {
     @Column(name = "description")
     private String description;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "eventID", fetch = FetchType.EAGER)
-    private Collection<EventMessages> eventMessagesCollection;
+    private Collection<AccessMessage> accessMessageCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "eventID", fetch = FetchType.EAGER)
-    private Collection<AccessMessages> accessMessagesCollection;
+    private Collection<EventMessage> eventMessageCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "eventID", fetch = FetchType.EAGER)
-    private Collection<InfoMessages> infoMessagesCollection;
+    private Collection<InfoMessage> infoMessageCollection;
 
-    public EventTypes() {
+    public EventType() {
     }
 
-    public EventTypes(Integer eventID) {
+    public EventType(Integer eventID) {
         this.eventID = eventID;
     }
 
-    public EventTypes(Integer eventID, String description) {
+    public EventType(Integer eventID, String description) {
         this.eventID = eventID;
         this.description = description;
     }
@@ -84,30 +84,30 @@ public class EventTypes implements Serializable {
     }
 
     @XmlTransient
-    public Collection<EventMessages> getEventMessagesCollection() {
-        return eventMessagesCollection;
+    public Collection<AccessMessage> getAccessMessageCollection() {
+        return accessMessageCollection;
     }
 
-    public void setEventMessagesCollection(Collection<EventMessages> eventMessagesCollection) {
-        this.eventMessagesCollection = eventMessagesCollection;
-    }
-
-    @XmlTransient
-    public Collection<AccessMessages> getAccessMessagesCollection() {
-        return accessMessagesCollection;
-    }
-
-    public void setAccessMessagesCollection(Collection<AccessMessages> accessMessagesCollection) {
-        this.accessMessagesCollection = accessMessagesCollection;
+    public void setAccessMessageCollection(Collection<AccessMessage> accessMessageCollection) {
+        this.accessMessageCollection = accessMessageCollection;
     }
 
     @XmlTransient
-    public Collection<InfoMessages> getInfoMessagesCollection() {
-        return infoMessagesCollection;
+    public Collection<EventMessage> getEventMessageCollection() {
+        return eventMessageCollection;
     }
 
-    public void setInfoMessagesCollection(Collection<InfoMessages> infoMessagesCollection) {
-        this.infoMessagesCollection = infoMessagesCollection;
+    public void setEventMessageCollection(Collection<EventMessage> eventMessageCollection) {
+        this.eventMessageCollection = eventMessageCollection;
+    }
+
+    @XmlTransient
+    public Collection<InfoMessage> getInfoMessageCollection() {
+        return infoMessageCollection;
+    }
+
+    public void setInfoMessageCollection(Collection<InfoMessage> infoMessageCollection) {
+        this.infoMessageCollection = infoMessageCollection;
     }
 
     @Override
@@ -120,10 +120,10 @@ public class EventTypes implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof EventTypes)) {
+        if (!(object instanceof EventType)) {
             return false;
         }
-        EventTypes other = (EventTypes) object;
+        EventType other = (EventType) object;
         if ((this.eventID == null && other.eventID != null) || (this.eventID != null && !this.eventID.equals(other.eventID))) {
             return false;
         }
@@ -132,7 +132,7 @@ public class EventTypes implements Serializable {
 
     @Override
     public String toString() {
-        return "com.apu.TcpServerForAccessControl.entity.EventTypes[ eventID=" + eventID + " ]";
+        return "com.apu.TcpServerForAccessControl.entity.EventType[ eventID=" + eventID + " ]";
     }
     
 }

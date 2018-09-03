@@ -11,6 +11,15 @@
     <class>com.apu.TcpServerForAccessControl.entity.AccessMessages</class>
     <class>com.apu.TcpServerForAccessControl.entity.Cards</class>
     <class>com.apu.TcpServerForAccessControl.entity.InfoMessages</class>
+    <class>com.apu.TcpServerForAccessControl.entity.InfoMessage</class>
+    <class>com.apu.TcpServerForAccessControl.entity.Card</class>
+    <class>com.apu.TcpServerForAccessControl.entity.Device</class>
+    <class>com.apu.TcpServerForAccessControl.entity.Rule</class>
+    <class>com.apu.TcpServerForAccessControl.entity.EventMessage</class>
+    <class>com.apu.TcpServerForAccessControl.entity.AccessMessage</class>
+    <class>com.apu.TcpServerForAccessControl.entity.EventType</class>
+    <class>com.apu.TcpServerForAccessControl.entity.RulesType</class>
+    <class>com.apu.TcpServerForAccessControl.entity.User</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mariadb://localhost:3306/accesscontroldb"/>
       <property name="javax.persistence.jdbc.user" value="app"/>
