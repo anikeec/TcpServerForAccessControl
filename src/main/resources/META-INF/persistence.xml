@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="com.apu_TcpServerForAccessControl_jar_0.0.1-SNAPSHOTPU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>com.apu.TcpServerForAccessControl.entity.Users</class>
+    <class>com.apu.TcpServerForAccessControl.entity.EventTypes</class>
+    <class>com.apu.TcpServerForAccessControl.entity.Rules</class>
+    <class>com.apu.TcpServerForAccessControl.entity.EventMessages</class>
+    <class>com.apu.TcpServerForAccessControl.entity.RulesTypes</class>
+    <class>com.apu.TcpServerForAccessControl.entity.Devices</class>
+    <class>com.apu.TcpServerForAccessControl.entity.AccessMessages</class>
+    <class>com.apu.TcpServerForAccessControl.entity.Cards</class>
+    <class>com.apu.TcpServerForAccessControl.entity.InfoMessages</class>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mariadb://localhost:3306/accesscontroldb"/>
+      <property name="javax.persistence.jdbc.user" value="app"/>
+      <property name="javax.persistence.jdbc.driver" value="org.mariadb.jdbc.Driver"/>
+      <property name="javax.persistence.jdbc.password" value="qwerty"/>
+    </properties>
+  </persistence-unit>
+</persistence>
