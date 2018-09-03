@@ -21,7 +21,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -34,7 +33,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "InfoMessage.findAll", query = "SELECT i FROM InfoMessage i")
-    , @NamedQuery(name = "InfoMessage.findByInfoMessID", query = "SELECT i FROM InfoMessage i WHERE i.infoMessID = :infoMessID")
+    , @NamedQuery(name = "InfoMessage.findByInfoMessId", query = "SELECT i FROM InfoMessage i WHERE i.infoMessId = :infoMessId")
     , @NamedQuery(name = "InfoMessage.findByDescription", query = "SELECT i FROM InfoMessage i WHERE i.description = :description")
     , @NamedQuery(name = "InfoMessage.findByDate", query = "SELECT i FROM InfoMessage i WHERE i.date = :date")})
 public class InfoMessage implements Serializable {
@@ -43,44 +42,34 @@ public class InfoMessage implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "infoMessID")
-    private Integer infoMessID;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
+    @Column(name = "info_mess_id")
+    private Integer infoMessId;
+    @Size(max = 255)
     @Column(name = "description")
     private String description;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "Date")
+    @Column(name = "date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
-    @JoinColumn(name = "deviceID", referencedColumnName = "deviceID")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private Device deviceID;
-    @JoinColumn(name = "eventID", referencedColumnName = "eventID")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private EventType eventID;
+    @JoinColumn(name = "device_id", referencedColumnName = "device_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Device deviceId;
+    @JoinColumn(name = "event_id", referencedColumnName = "event_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private EventType eventId;
 
     public InfoMessage() {
     }
 
-    public InfoMessage(Integer infoMessID) {
-        this.infoMessID = infoMessID;
+    public InfoMessage(Integer infoMessId) {
+        this.infoMessId = infoMessId;
     }
 
-    public InfoMessage(Integer infoMessID, String description, Date date) {
-        this.infoMessID = infoMessID;
-        this.description = description;
-        this.date = date;
+    public Integer getInfoMessId() {
+        return infoMessId;
     }
 
-    public Integer getInfoMessID() {
-        return infoMessID;
-    }
-
-    public void setInfoMessID(Integer infoMessID) {
-        this.infoMessID = infoMessID;
+    public void setInfoMessId(Integer infoMessId) {
+        this.infoMessId = infoMessId;
     }
 
     public String getDescription() {
@@ -99,26 +88,26 @@ public class InfoMessage implements Serializable {
         this.date = date;
     }
 
-    public Device getDeviceID() {
-        return deviceID;
+    public Device getDeviceId() {
+        return deviceId;
     }
 
-    public void setDeviceID(Device deviceID) {
-        this.deviceID = deviceID;
+    public void setDeviceId(Device deviceId) {
+        this.deviceId = deviceId;
     }
 
-    public EventType getEventID() {
-        return eventID;
+    public EventType getEventId() {
+        return eventId;
     }
 
-    public void setEventID(EventType eventID) {
-        this.eventID = eventID;
+    public void setEventId(EventType eventId) {
+        this.eventId = eventId;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (infoMessID != null ? infoMessID.hashCode() : 0);
+        hash += (infoMessId != null ? infoMessId.hashCode() : 0);
         return hash;
     }
 
@@ -129,7 +118,7 @@ public class InfoMessage implements Serializable {
             return false;
         }
         InfoMessage other = (InfoMessage) object;
-        if ((this.infoMessID == null && other.infoMessID != null) || (this.infoMessID != null && !this.infoMessID.equals(other.infoMessID))) {
+        if ((this.infoMessId == null && other.infoMessId != null) || (this.infoMessId != null && !this.infoMessId.equals(other.infoMessId))) {
             return false;
         }
         return true;
@@ -137,7 +126,7 @@ public class InfoMessage implements Serializable {
 
     @Override
     public String toString() {
-        return "com.apu.TcpServerForAccessControl.entity.InfoMessage[ infoMessID=" + infoMessID + " ]";
+        return "com.apu.TcpServerForAccessControl.entity.InfoMessage[ infoMessId=" + infoMessId + " ]";
     }
     
 }

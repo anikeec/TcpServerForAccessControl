@@ -9,7 +9,6 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -24,7 +23,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -37,7 +35,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Rule.findAll", query = "SELECT r FROM Rule r")
-    , @NamedQuery(name = "Rule.findByRuleID", query = "SELECT r FROM Rule r WHERE r.ruleID = :ruleID")
+    , @NamedQuery(name = "Rule.findByRuleId", query = "SELECT r FROM Rule r WHERE r.ruleId = :ruleId")
     , @NamedQuery(name = "Rule.findByDateBegin", query = "SELECT r FROM Rule r WHERE r.dateBegin = :dateBegin")
     , @NamedQuery(name = "Rule.findByDateEnd", query = "SELECT r FROM Rule r WHERE r.dateEnd = :dateEnd")})
 public class Rule implements Serializable {
@@ -46,49 +44,39 @@ public class Rule implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "ruleID")
-    private Integer ruleID;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "DateBegin")
+    @Column(name = "rule_id")
+    private Integer ruleId;
+    @Column(name = "date_begin")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateBegin;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "DateEnd")
+    @Column(name = "date_end")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateEnd;
-    @JoinColumn(name = "cardID", referencedColumnName = "cardID")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private Card cardID;
-    @JoinColumn(name = "devideID", referencedColumnName = "deviceID")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private Device devideID;
-    @JoinColumn(name = "ruleTypeID", referencedColumnName = "ruleTypeId")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private RulesType ruleTypeID;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ruleID", fetch = FetchType.EAGER)
+    @JoinColumn(name = "card_id", referencedColumnName = "card_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Card cardId;
+    @JoinColumn(name = "devide_id", referencedColumnName = "device_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Device devideId;
+    @JoinColumn(name = "rule_type_id", referencedColumnName = "rule_type_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private RulesType ruleTypeId;
+    @OneToMany(mappedBy = "ruleId", fetch = FetchType.LAZY)
     private Collection<EventMessage> eventMessageCollection;
 
     public Rule() {
     }
 
-    public Rule(Integer ruleID) {
-        this.ruleID = ruleID;
+    public Rule(Integer ruleId) {
+        this.ruleId = ruleId;
     }
 
-    public Rule(Integer ruleID, Date dateBegin, Date dateEnd) {
-        this.ruleID = ruleID;
-        this.dateBegin = dateBegin;
-        this.dateEnd = dateEnd;
+    public Integer getRuleId() {
+        return ruleId;
     }
 
-    public Integer getRuleID() {
-        return ruleID;
-    }
-
-    public void setRuleID(Integer ruleID) {
-        this.ruleID = ruleID;
+    public void setRuleId(Integer ruleId) {
+        this.ruleId = ruleId;
     }
 
     public Date getDateBegin() {
@@ -107,28 +95,28 @@ public class Rule implements Serializable {
         this.dateEnd = dateEnd;
     }
 
-    public Card getCardID() {
-        return cardID;
+    public Card getCardId() {
+        return cardId;
     }
 
-    public void setCardID(Card cardID) {
-        this.cardID = cardID;
+    public void setCardId(Card cardId) {
+        this.cardId = cardId;
     }
 
-    public Device getDevideID() {
-        return devideID;
+    public Device getDevideId() {
+        return devideId;
     }
 
-    public void setDevideID(Device devideID) {
-        this.devideID = devideID;
+    public void setDevideId(Device devideId) {
+        this.devideId = devideId;
     }
 
-    public RulesType getRuleTypeID() {
-        return ruleTypeID;
+    public RulesType getRuleTypeId() {
+        return ruleTypeId;
     }
 
-    public void setRuleTypeID(RulesType ruleTypeID) {
-        this.ruleTypeID = ruleTypeID;
+    public void setRuleTypeId(RulesType ruleTypeId) {
+        this.ruleTypeId = ruleTypeId;
     }
 
     @XmlTransient
@@ -143,7 +131,7 @@ public class Rule implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (ruleID != null ? ruleID.hashCode() : 0);
+        hash += (ruleId != null ? ruleId.hashCode() : 0);
         return hash;
     }
 
@@ -154,7 +142,7 @@ public class Rule implements Serializable {
             return false;
         }
         Rule other = (Rule) object;
-        if ((this.ruleID == null && other.ruleID != null) || (this.ruleID != null && !this.ruleID.equals(other.ruleID))) {
+        if ((this.ruleId == null && other.ruleId != null) || (this.ruleId != null && !this.ruleId.equals(other.ruleId))) {
             return false;
         }
         return true;
@@ -162,7 +150,7 @@ public class Rule implements Serializable {
 
     @Override
     public String toString() {
-        return "com.apu.TcpServerForAccessControl.entity.Rule[ ruleID=" + ruleID + " ]";
+        return "com.apu.TcpServerForAccessControl.entity.Rule[ ruleId=" + ruleId + " ]";
     }
     
 }

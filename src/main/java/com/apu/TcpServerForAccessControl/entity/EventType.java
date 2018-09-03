@@ -8,7 +8,6 @@ package com.apu.TcpServerForAccessControl.entity;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -19,7 +18,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -33,7 +31,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "EventType.findAll", query = "SELECT e FROM EventType e")
-    , @NamedQuery(name = "EventType.findByEventID", query = "SELECT e FROM EventType e WHERE e.eventID = :eventID")
+    , @NamedQuery(name = "EventType.findByEventId", query = "SELECT e FROM EventType e WHERE e.eventId = :eventId")
     , @NamedQuery(name = "EventType.findByDescription", query = "SELECT e FROM EventType e WHERE e.description = :description")})
 public class EventType implements Serializable {
 
@@ -41,38 +39,31 @@ public class EventType implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "eventID")
-    private Integer eventID;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
+    @Column(name = "event_id")
+    private Integer eventId;
+    @Size(max = 255)
     @Column(name = "description")
     private String description;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "eventID", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "eventId", fetch = FetchType.LAZY)
     private Collection<AccessMessage> accessMessageCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "eventID", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "eventId", fetch = FetchType.LAZY)
     private Collection<EventMessage> eventMessageCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "eventID", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "eventId", fetch = FetchType.LAZY)
     private Collection<InfoMessage> infoMessageCollection;
 
     public EventType() {
     }
 
-    public EventType(Integer eventID) {
-        this.eventID = eventID;
+    public EventType(Integer eventId) {
+        this.eventId = eventId;
     }
 
-    public EventType(Integer eventID, String description) {
-        this.eventID = eventID;
-        this.description = description;
+    public Integer getEventId() {
+        return eventId;
     }
 
-    public Integer getEventID() {
-        return eventID;
-    }
-
-    public void setEventID(Integer eventID) {
-        this.eventID = eventID;
+    public void setEventId(Integer eventId) {
+        this.eventId = eventId;
     }
 
     public String getDescription() {
@@ -113,7 +104,7 @@ public class EventType implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (eventID != null ? eventID.hashCode() : 0);
+        hash += (eventId != null ? eventId.hashCode() : 0);
         return hash;
     }
 
@@ -124,7 +115,7 @@ public class EventType implements Serializable {
             return false;
         }
         EventType other = (EventType) object;
-        if ((this.eventID == null && other.eventID != null) || (this.eventID != null && !this.eventID.equals(other.eventID))) {
+        if ((this.eventId == null && other.eventId != null) || (this.eventId != null && !this.eventId.equals(other.eventId))) {
             return false;
         }
         return true;
@@ -132,7 +123,7 @@ public class EventType implements Serializable {
 
     @Override
     public String toString() {
-        return "com.apu.TcpServerForAccessControl.entity.EventType[ eventID=" + eventID + " ]";
+        return "com.apu.TcpServerForAccessControl.entity.EventType[ eventId=" + eventId + " ]";
     }
     
 }

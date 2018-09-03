@@ -9,7 +9,6 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -24,7 +23,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -38,7 +36,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "AccessMessage.findAll", query = "SELECT a FROM AccessMessage a")
-    , @NamedQuery(name = "AccessMessage.findByAccessMessID", query = "SELECT a FROM AccessMessage a WHERE a.accessMessID = :accessMessID")
+    , @NamedQuery(name = "AccessMessage.findByAccessMessId", query = "SELECT a FROM AccessMessage a WHERE a.accessMessId = :accessMessId")
     , @NamedQuery(name = "AccessMessage.findByDescription", query = "SELECT a FROM AccessMessage a WHERE a.description = :description")
     , @NamedQuery(name = "AccessMessage.findByDate", query = "SELECT a FROM AccessMessage a WHERE a.date = :date")})
 public class AccessMessage implements Serializable {
@@ -47,49 +45,39 @@ public class AccessMessage implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "accessMessID")
-    private Integer accessMessID;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
+    @Column(name = "access_mess_id")
+    private Integer accessMessId;
+    @Size(max = 255)
     @Column(name = "description")
     private String description;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "Date")
+    @Column(name = "date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
-    @JoinColumn(name = "cardID", referencedColumnName = "cardID")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private Card cardID;
-    @JoinColumn(name = "deviceID", referencedColumnName = "deviceID")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private Device deviceID;
-    @JoinColumn(name = "eventID", referencedColumnName = "eventID")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private EventType eventID;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "baseAccessMessID", fetch = FetchType.EAGER)
+    @JoinColumn(name = "card_id", referencedColumnName = "card_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Card cardId;
+    @JoinColumn(name = "device_id", referencedColumnName = "device_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Device deviceId;
+    @JoinColumn(name = "event_id", referencedColumnName = "event_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private EventType eventId;
+    @OneToMany(mappedBy = "baseAccessMessId", fetch = FetchType.LAZY)
     private Collection<EventMessage> eventMessageCollection;
 
     public AccessMessage() {
     }
 
-    public AccessMessage(Integer accessMessID) {
-        this.accessMessID = accessMessID;
+    public AccessMessage(Integer accessMessId) {
+        this.accessMessId = accessMessId;
     }
 
-    public AccessMessage(Integer accessMessID, String description, Date date) {
-        this.accessMessID = accessMessID;
-        this.description = description;
-        this.date = date;
+    public Integer getAccessMessId() {
+        return accessMessId;
     }
 
-    public Integer getAccessMessID() {
-        return accessMessID;
-    }
-
-    public void setAccessMessID(Integer accessMessID) {
-        this.accessMessID = accessMessID;
+    public void setAccessMessId(Integer accessMessId) {
+        this.accessMessId = accessMessId;
     }
 
     public String getDescription() {
@@ -108,28 +96,28 @@ public class AccessMessage implements Serializable {
         this.date = date;
     }
 
-    public Card getCardID() {
-        return cardID;
+    public Card getCardId() {
+        return cardId;
     }
 
-    public void setCardID(Card cardID) {
-        this.cardID = cardID;
+    public void setCardId(Card cardId) {
+        this.cardId = cardId;
     }
 
-    public Device getDeviceID() {
-        return deviceID;
+    public Device getDeviceId() {
+        return deviceId;
     }
 
-    public void setDeviceID(Device deviceID) {
-        this.deviceID = deviceID;
+    public void setDeviceId(Device deviceId) {
+        this.deviceId = deviceId;
     }
 
-    public EventType getEventID() {
-        return eventID;
+    public EventType getEventId() {
+        return eventId;
     }
 
-    public void setEventID(EventType eventID) {
-        this.eventID = eventID;
+    public void setEventId(EventType eventId) {
+        this.eventId = eventId;
     }
 
     @XmlTransient
@@ -144,7 +132,7 @@ public class AccessMessage implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (accessMessID != null ? accessMessID.hashCode() : 0);
+        hash += (accessMessId != null ? accessMessId.hashCode() : 0);
         return hash;
     }
 
@@ -155,7 +143,7 @@ public class AccessMessage implements Serializable {
             return false;
         }
         AccessMessage other = (AccessMessage) object;
-        if ((this.accessMessID == null && other.accessMessID != null) || (this.accessMessID != null && !this.accessMessID.equals(other.accessMessID))) {
+        if ((this.accessMessId == null && other.accessMessId != null) || (this.accessMessId != null && !this.accessMessId.equals(other.accessMessId))) {
             return false;
         }
         return true;
@@ -163,7 +151,7 @@ public class AccessMessage implements Serializable {
 
     @Override
     public String toString() {
-        return "com.apu.TcpServerForAccessControl.entity.AccessMessage[ accessMessID=" + accessMessID + " ]";
+        return "com.apu.TcpServerForAccessControl.entity.AccessMessage[ accessMessId=" + accessMessId + " ]";
     }
     
 }

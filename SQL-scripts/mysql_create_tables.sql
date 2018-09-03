@@ -1,101 +1,101 @@
 use accesscontroldb;
 
 CREATE TABLE `user` (
-	`userId` INT NOT NULL AUTO_INCREMENT,
-	`firstName` VARCHAR(255) NOT NULL,
-	`secondName` VARCHAR(255) NOT NULL,
-	`phoneNumber` VARCHAR(255) NOT NULL,
-	`email` VARCHAR(255) NOT NULL,
-	PRIMARY KEY (`userId`)
+	`user_id` INT NOT NULL AUTO_INCREMENT,
+	`first_name` VARCHAR(255),
+	`second_name` VARCHAR(255),
+	`phone_number` VARCHAR(255),
+	`email` VARCHAR(255),
+	PRIMARY KEY (`user_id`)
 );
 
 CREATE TABLE `card` (
-	`cardID` INT NOT NULL AUTO_INCREMENT,
-	`cardNumber` VARCHAR(255) NOT NULL,
-	`userID` INT NOT NULL,
-	PRIMARY KEY (`cardID`)
+	`card_id` INT NOT NULL AUTO_INCREMENT,
+	`card_number` VARCHAR(255),
+	`user_id` INT,
+	PRIMARY KEY (`card_id`)
 );
 
 CREATE TABLE `device` (
-	`deviceID` INT NOT NULL AUTO_INCREMENT,
-	`lastPacketID` INT NOT NULL,
-	PRIMARY KEY (`deviceID`)
+	`device_id` INT NOT NULL AUTO_INCREMENT,
+	`last_packet_id` INT,
+	PRIMARY KEY (`device_id`)
 );
 
 CREATE TABLE `access_message` (
-	`accessMessID` INT NOT NULL AUTO_INCREMENT,
-	`cardID` INT NOT NULL,
-	`deviceID` INT NOT NULL,
-	`eventID` INT NOT NULL,
-	`description` VARCHAR(255) NOT NULL,
-	`Date` DATETIME NOT NULL,
-	PRIMARY KEY (`accessMessID`)
+	`access_mess_id` INT NOT NULL AUTO_INCREMENT,
+	`card_id` INT,
+	`device_id` INT,
+	`event_id` INT,
+	`description` VARCHAR(255),
+	`date` DATETIME,
+	PRIMARY KEY (`access_mess_id`)
 );
 
 CREATE TABLE `info_message` (
-	`infoMessID` INT NOT NULL AUTO_INCREMENT,
-	`deviceID` INT NOT NULL,
-	`eventID` INT NOT NULL,
-	`description` VARCHAR(255) NOT NULL,
-	`Date` DATETIME NOT NULL,
-	PRIMARY KEY (`infoMessID`)
+	`info_mess_id` INT NOT NULL AUTO_INCREMENT,
+	`device_id` INT,
+	`event_id` INT,
+	`description` VARCHAR(255),
+	`date` DATETIME,
+	PRIMARY KEY (`info_mess_id`)
 );
 
 CREATE TABLE `event_type` (
-	`eventID` INT NOT NULL AUTO_INCREMENT,
-	`description` VARCHAR(255) NOT NULL,
-	PRIMARY KEY (`eventID`)
+	`event_id` INT NOT NULL AUTO_INCREMENT,
+	`description` VARCHAR(255),
+	PRIMARY KEY (`event_id`)
 );
 
 CREATE TABLE `rule` (
-	`ruleID` INT NOT NULL AUTO_INCREMENT,
-	`cardID` INT NOT NULL,
-	`devideID` INT NOT NULL,
-	`ruleTypeID` INT NOT NULL,
-	`DateBegin` DATETIME NOT NULL,
-	`DateEnd` DATETIME NOT NULL,
-	PRIMARY KEY (`ruleID`)
+	`rule_id` INT NOT NULL AUTO_INCREMENT,
+	`card_id` INT,
+	`devide_id` INT,
+	`rule_type_id` INT,
+	`date_begin` DATETIME,
+	`date_end` DATETIME,
+	PRIMARY KEY (`rule_id`)
 );
 
 CREATE TABLE `rules_type` (
-	`ruleTypeId` INT NOT NULL AUTO_INCREMENT,
-	`description` VARCHAR(255) NOT NULL,
-	PRIMARY KEY (`ruleTypeId`)
+	`rule_type_id` INT NOT NULL AUTO_INCREMENT,
+	`description` VARCHAR(255),
+	PRIMARY KEY (`rule_type_id`)
 );
 
 CREATE TABLE `event_message` (
-	`eventMessID` INT NOT NULL AUTO_INCREMENT,
-	`deviceID` INT NOT NULL,
-	`eventID` INT NOT NULL,
-	`description` VARCHAR(255) NOT NULL,
-	`Date` DATETIME NOT NULL,
-	`baseAccessMessID` INT NOT NULL,
-	`ruleID` INT NOT NULL,
-	PRIMARY KEY (`eventMessID`)
+	`event_mess_id` INT NOT NULL AUTO_INCREMENT,
+	`device_id` INT,
+	`event_id` INT,
+	`description` VARCHAR(255),
+	`date` DATETIME,
+	`base_access_mess_id` INT,
+	`rule_id` INT,
+	PRIMARY KEY (`event_mess_id`)
 );
 
-ALTER TABLE `card` ADD CONSTRAINT `card_fk0` FOREIGN KEY (`userID`) REFERENCES `user`(`userId`);
+ALTER TABLE `card` ADD CONSTRAINT `card_fk0` FOREIGN KEY (`user_id`) REFERENCES `user`(`user_id`);
 
-ALTER TABLE `access_message` ADD CONSTRAINT `access_message_fk0` FOREIGN KEY (`cardID`) REFERENCES `card`(`cardID`);
+ALTER TABLE `access_message` ADD CONSTRAINT `access_message_fk0` FOREIGN KEY (`card_id`) REFERENCES `card`(`card_id`);
 
-ALTER TABLE `access_message` ADD CONSTRAINT `access_message_fk1` FOREIGN KEY (`deviceID`) REFERENCES `device`(`deviceID`);
+ALTER TABLE `access_message` ADD CONSTRAINT `access_message_fk1` FOREIGN KEY (`device_id`) REFERENCES `device`(`device_id`);
 
-ALTER TABLE `access_message` ADD CONSTRAINT `access_message_fk2` FOREIGN KEY (`eventID`) REFERENCES `event_type`(`eventID`);
+ALTER TABLE `access_message` ADD CONSTRAINT `access_message_fk2` FOREIGN KEY (`event_id`) REFERENCES `event_type`(`event_id`);
 
-ALTER TABLE `info_message` ADD CONSTRAINT `info_message_fk0` FOREIGN KEY (`deviceID`) REFERENCES `device`(`deviceID`);
+ALTER TABLE `info_message` ADD CONSTRAINT `info_message_fk0` FOREIGN KEY (`device_id`) REFERENCES `device`(`device_id`);
 
-ALTER TABLE `info_message` ADD CONSTRAINT `info_message_fk1` FOREIGN KEY (`eventID`) REFERENCES `event_type`(`eventID`);
+ALTER TABLE `info_message` ADD CONSTRAINT `info_message_fk1` FOREIGN KEY (`event_id`) REFERENCES `event_type`(`event_id`);
 
-ALTER TABLE `rule` ADD CONSTRAINT `rule_fk0` FOREIGN KEY (`cardID`) REFERENCES `card`(`cardID`);
+ALTER TABLE `rule` ADD CONSTRAINT `rule_fk0` FOREIGN KEY (`card_id`) REFERENCES `card`(`card_id`);
 
-ALTER TABLE `rule` ADD CONSTRAINT `rule_fk1` FOREIGN KEY (`devideID`) REFERENCES `device`(`deviceID`);
+ALTER TABLE `rule` ADD CONSTRAINT `rule_fk1` FOREIGN KEY (`devide_id`) REFERENCES `device`(`device_id`);
 
-ALTER TABLE `rule` ADD CONSTRAINT `rule_fk2` FOREIGN KEY (`ruleTypeID`) REFERENCES `rules_type`(`ruleTypeId`);
+ALTER TABLE `rule` ADD CONSTRAINT `rule_fk2` FOREIGN KEY (`rule_type_id`) REFERENCES `rules_type`(`rule_type_id`);
 
-ALTER TABLE `event_message` ADD CONSTRAINT `event_message_fk0` FOREIGN KEY (`deviceID`) REFERENCES `device`(`deviceID`);
+ALTER TABLE `event_message` ADD CONSTRAINT `event_message_fk0` FOREIGN KEY (`device_id`) REFERENCES `device`(`device_id`);
 
-ALTER TABLE `event_message` ADD CONSTRAINT `event_message_fk1` FOREIGN KEY (`eventID`) REFERENCES `event_type`(`eventID`);
+ALTER TABLE `event_message` ADD CONSTRAINT `event_message_fk1` FOREIGN KEY (`event_id`) REFERENCES `event_type`(`event_id`);
 
-ALTER TABLE `event_message` ADD CONSTRAINT `event_message_fk2` FOREIGN KEY (`baseAccessMessID`) REFERENCES `access_message`(`accessMessID`);
+ALTER TABLE `event_message` ADD CONSTRAINT `event_message_fk2` FOREIGN KEY (`base_access_mess_id`) REFERENCES `access_message`(`access_mess_id`);
 
-ALTER TABLE `event_message` ADD CONSTRAINT `event_message_fk3` FOREIGN KEY (`ruleID`) REFERENCES `rule`(`ruleID`);
+ALTER TABLE `event_message` ADD CONSTRAINT `event_message_fk3` FOREIGN KEY (`rule_id`) REFERENCES `rule`(`rule_id`);

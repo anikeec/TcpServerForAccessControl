@@ -8,7 +8,6 @@ package com.apu.TcpServerForAccessControl.entity;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -19,7 +18,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -44,30 +42,22 @@ public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "userId")
+    @Column(name = "user_id")
     private Integer userId;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
-    @Column(name = "firstName")
+    @Size(max = 255)
+    @Column(name = "first_name")
     private String firstName;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
-    @Column(name = "secondName")
+    @Size(max = 255)
+    @Column(name = "second_name")
     private String secondName;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
-    @Column(name = "phoneNumber")
+    @Size(max = 255)
+    @Column(name = "phone_number")
     private String phoneNumber;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
+    @Size(max = 255)
     @Column(name = "email")
     private String email;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userID", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "userId", fetch = FetchType.LAZY)
     private Collection<Card> cardCollection;
 
     public User() {
@@ -75,14 +65,6 @@ public class User implements Serializable {
 
     public User(Integer userId) {
         this.userId = userId;
-    }
-
-    public User(Integer userId, String firstName, String secondName, String phoneNumber, String email) {
-        this.userId = userId;
-        this.firstName = firstName;
-        this.secondName = secondName;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
     }
 
     public Integer getUserId() {

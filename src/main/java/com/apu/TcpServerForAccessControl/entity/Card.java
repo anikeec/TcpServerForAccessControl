@@ -8,7 +8,6 @@ package com.apu.TcpServerForAccessControl.entity;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -21,7 +20,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -35,7 +33,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Card.findAll", query = "SELECT c FROM Card c")
-    , @NamedQuery(name = "Card.findByCardID", query = "SELECT c FROM Card c WHERE c.cardID = :cardID")
+    , @NamedQuery(name = "Card.findByCardId", query = "SELECT c FROM Card c WHERE c.cardId = :cardId")
     , @NamedQuery(name = "Card.findByCardNumber", query = "SELECT c FROM Card c WHERE c.cardNumber = :cardNumber")})
 public class Card implements Serializable {
 
@@ -43,39 +41,32 @@ public class Card implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "cardID")
-    private Integer cardID;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
-    @Column(name = "cardNumber")
+    @Column(name = "card_id")
+    private Integer cardId;
+    @Size(max = 255)
+    @Column(name = "card_number")
     private String cardNumber;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cardID", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "cardId", fetch = FetchType.LAZY)
     private Collection<AccessMessage> accessMessageCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cardID", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "cardId", fetch = FetchType.LAZY)
     private Collection<Rule> ruleCollection;
-    @JoinColumn(name = "userID", referencedColumnName = "userId")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private User userID;
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User userId;
 
     public Card() {
     }
 
-    public Card(Integer cardID) {
-        this.cardID = cardID;
+    public Card(Integer cardId) {
+        this.cardId = cardId;
     }
 
-    public Card(Integer cardID, String cardNumber) {
-        this.cardID = cardID;
-        this.cardNumber = cardNumber;
+    public Integer getCardId() {
+        return cardId;
     }
 
-    public Integer getCardID() {
-        return cardID;
-    }
-
-    public void setCardID(Integer cardID) {
-        this.cardID = cardID;
+    public void setCardId(Integer cardId) {
+        this.cardId = cardId;
     }
 
     public String getCardNumber() {
@@ -104,18 +95,18 @@ public class Card implements Serializable {
         this.ruleCollection = ruleCollection;
     }
 
-    public User getUserID() {
-        return userID;
+    public User getUserId() {
+        return userId;
     }
 
-    public void setUserID(User userID) {
-        this.userID = userID;
+    public void setUserId(User userId) {
+        this.userId = userId;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (cardID != null ? cardID.hashCode() : 0);
+        hash += (cardId != null ? cardId.hashCode() : 0);
         return hash;
     }
 
@@ -126,7 +117,7 @@ public class Card implements Serializable {
             return false;
         }
         Card other = (Card) object;
-        if ((this.cardID == null && other.cardID != null) || (this.cardID != null && !this.cardID.equals(other.cardID))) {
+        if ((this.cardId == null && other.cardId != null) || (this.cardId != null && !this.cardId.equals(other.cardId))) {
             return false;
         }
         return true;
@@ -134,7 +125,7 @@ public class Card implements Serializable {
 
     @Override
     public String toString() {
-        return "com.apu.TcpServerForAccessControl.entity.Card[ cardID=" + cardID + " ]";
+        return "com.apu.TcpServerForAccessControl.entity.Card[ cardId=" + cardId + " ]";
     }
     
 }

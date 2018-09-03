@@ -8,7 +8,6 @@ package com.apu.TcpServerForAccessControl.entity;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -19,7 +18,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -41,14 +39,12 @@ public class RulesType implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "ruleTypeId")
+    @Column(name = "rule_type_id")
     private Integer ruleTypeId;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
+    @Size(max = 255)
     @Column(name = "description")
     private String description;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ruleTypeID", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "ruleTypeId", fetch = FetchType.LAZY)
     private Collection<Rule> ruleCollection;
 
     public RulesType() {
@@ -56,11 +52,6 @@ public class RulesType implements Serializable {
 
     public RulesType(Integer ruleTypeId) {
         this.ruleTypeId = ruleTypeId;
-    }
-
-    public RulesType(Integer ruleTypeId, String description) {
-        this.ruleTypeId = ruleTypeId;
-        this.description = description;
     }
 
     public Integer getRuleTypeId() {

@@ -21,7 +21,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -34,7 +33,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "EventMessage.findAll", query = "SELECT e FROM EventMessage e")
-    , @NamedQuery(name = "EventMessage.findByEventMessID", query = "SELECT e FROM EventMessage e WHERE e.eventMessID = :eventMessID")
+    , @NamedQuery(name = "EventMessage.findByEventMessId", query = "SELECT e FROM EventMessage e WHERE e.eventMessId = :eventMessId")
     , @NamedQuery(name = "EventMessage.findByDescription", query = "SELECT e FROM EventMessage e WHERE e.description = :description")
     , @NamedQuery(name = "EventMessage.findByDate", query = "SELECT e FROM EventMessage e WHERE e.date = :date")})
 public class EventMessage implements Serializable {
@@ -43,50 +42,40 @@ public class EventMessage implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "eventMessID")
-    private Integer eventMessID;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
+    @Column(name = "event_mess_id")
+    private Integer eventMessId;
+    @Size(max = 255)
     @Column(name = "description")
     private String description;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "Date")
+    @Column(name = "date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
-    @JoinColumn(name = "baseAccessMessID", referencedColumnName = "accessMessID")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private AccessMessage baseAccessMessID;
-    @JoinColumn(name = "deviceID", referencedColumnName = "deviceID")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private Device deviceID;
-    @JoinColumn(name = "eventID", referencedColumnName = "eventID")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private EventType eventID;
-    @JoinColumn(name = "ruleID", referencedColumnName = "ruleID")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private Rule ruleID;
+    @JoinColumn(name = "base_access_mess_id", referencedColumnName = "access_mess_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private AccessMessage baseAccessMessId;
+    @JoinColumn(name = "device_id", referencedColumnName = "device_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Device deviceId;
+    @JoinColumn(name = "event_id", referencedColumnName = "event_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private EventType eventId;
+    @JoinColumn(name = "rule_id", referencedColumnName = "rule_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Rule ruleId;
 
     public EventMessage() {
     }
 
-    public EventMessage(Integer eventMessID) {
-        this.eventMessID = eventMessID;
+    public EventMessage(Integer eventMessId) {
+        this.eventMessId = eventMessId;
     }
 
-    public EventMessage(Integer eventMessID, String description, Date date) {
-        this.eventMessID = eventMessID;
-        this.description = description;
-        this.date = date;
+    public Integer getEventMessId() {
+        return eventMessId;
     }
 
-    public Integer getEventMessID() {
-        return eventMessID;
-    }
-
-    public void setEventMessID(Integer eventMessID) {
-        this.eventMessID = eventMessID;
+    public void setEventMessId(Integer eventMessId) {
+        this.eventMessId = eventMessId;
     }
 
     public String getDescription() {
@@ -105,42 +94,42 @@ public class EventMessage implements Serializable {
         this.date = date;
     }
 
-    public AccessMessage getBaseAccessMessID() {
-        return baseAccessMessID;
+    public AccessMessage getBaseAccessMessId() {
+        return baseAccessMessId;
     }
 
-    public void setBaseAccessMessID(AccessMessage baseAccessMessID) {
-        this.baseAccessMessID = baseAccessMessID;
+    public void setBaseAccessMessId(AccessMessage baseAccessMessId) {
+        this.baseAccessMessId = baseAccessMessId;
     }
 
-    public Device getDeviceID() {
-        return deviceID;
+    public Device getDeviceId() {
+        return deviceId;
     }
 
-    public void setDeviceID(Device deviceID) {
-        this.deviceID = deviceID;
+    public void setDeviceId(Device deviceId) {
+        this.deviceId = deviceId;
     }
 
-    public EventType getEventID() {
-        return eventID;
+    public EventType getEventId() {
+        return eventId;
     }
 
-    public void setEventID(EventType eventID) {
-        this.eventID = eventID;
+    public void setEventId(EventType eventId) {
+        this.eventId = eventId;
     }
 
-    public Rule getRuleID() {
-        return ruleID;
+    public Rule getRuleId() {
+        return ruleId;
     }
 
-    public void setRuleID(Rule ruleID) {
-        this.ruleID = ruleID;
+    public void setRuleId(Rule ruleId) {
+        this.ruleId = ruleId;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (eventMessID != null ? eventMessID.hashCode() : 0);
+        hash += (eventMessId != null ? eventMessId.hashCode() : 0);
         return hash;
     }
 
@@ -151,7 +140,7 @@ public class EventMessage implements Serializable {
             return false;
         }
         EventMessage other = (EventMessage) object;
-        if ((this.eventMessID == null && other.eventMessID != null) || (this.eventMessID != null && !this.eventMessID.equals(other.eventMessID))) {
+        if ((this.eventMessId == null && other.eventMessId != null) || (this.eventMessId != null && !this.eventMessId.equals(other.eventMessId))) {
             return false;
         }
         return true;
@@ -159,7 +148,7 @@ public class EventMessage implements Serializable {
 
     @Override
     public String toString() {
-        return "com.apu.TcpServerForAccessControl.entity.EventMessage[ eventMessID=" + eventMessID + " ]";
+        return "com.apu.TcpServerForAccessControl.entity.EventMessage[ eventMessId=" + eventMessId + " ]";
     }
     
 }
