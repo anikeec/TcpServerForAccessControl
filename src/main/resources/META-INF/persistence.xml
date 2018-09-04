@@ -9,13 +9,14 @@
     <class>com.apu.TcpServerForAccessControl.entity.RulesType</class>
     <class>com.apu.TcpServerForAccessControl.entity.EventMessage</class>
     <class>com.apu.TcpServerForAccessControl.entity.AccessMessage</class>
+    <class>com.apu.TcpServerForAccessControl.entity.AccessMessageWrong</class>
     <class>com.apu.TcpServerForAccessControl.entity.InfoMessage</class>
     <class>com.apu.TcpServerForAccessControl.entity.User</class>
-<!--     <properties> -->
-<!--       <property name="javax.persistence.jdbc.url" value="jdbc:mariadb://localhost:3306/accesscontroldb"/> -->
-<!--       <property name="javax.persistence.jdbc.user" value="app"/> -->
-<!--       <property name="javax.persistence.jdbc.driver" value="org.mariadb.jdbc.Driver"/> -->
-<!--       <property name="javax.persistence.jdbc.password" value="qwerty"/> -->
-<!--     </properties> -->
+    <!--     <properties> -->
+    <!--       <property name="javax.persistence.jdbc.url" value="jdbc:mariadb://localhost:3306/accesscontroldb"/> -->
+    <!--       <property name="javax.persistence.jdbc.user" value="app"/> -->
+    <!--       <property name="javax.persistence.jdbc.driver" value="org.mariadb.jdbc.Driver"/> -->
+    <!--       <property name="javax.persistence.jdbc.password" value="qwerty"/> -->
+    <!--     </properties> -->    
   </persistence-unit>
 </persistence>

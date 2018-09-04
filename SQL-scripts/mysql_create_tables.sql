@@ -18,6 +18,7 @@ CREATE TABLE `card` (
 
 CREATE TABLE `device` (
 	`device_id` INT NOT NULL AUTO_INCREMENT,
+	`device_number` INT,
 	`last_packet_id` INT,
 	PRIMARY KEY (`device_id`)
 );
@@ -57,7 +58,7 @@ CREATE TABLE `rule` (
 	PRIMARY KEY (`rule_id`)
 );
 
-CREATE TABLE `rules_type` (
+CREATE TABLE `rule_type` (
 	`rule_type_id` INT NOT NULL AUTO_INCREMENT,
 	`description` VARCHAR(255),
 	PRIMARY KEY (`rule_type_id`)
@@ -72,6 +73,16 @@ CREATE TABLE `event_message` (
 	`base_access_mess_id` INT,
 	`rule_id` INT,
 	PRIMARY KEY (`event_mess_id`)
+);
+
+CREATE TABLE `access_message_wrong` (
+	`access_mess_id` INT NOT NULL AUTO_INCREMENT,
+	`card_number` VARCHAR(255),
+	`device_number` INT,
+	`event_id` INT,
+	`description` VARCHAR(255),
+	`date` DATETIME,
+	PRIMARY KEY (`access_mess_id`)
 );
 
 ALTER TABLE `card` ADD CONSTRAINT `card_fk0` FOREIGN KEY (`user_id`) REFERENCES `user`(`user_id`);
@@ -90,7 +101,7 @@ ALTER TABLE `rule` ADD CONSTRAINT `rule_fk0` FOREIGN KEY (`card_id`) REFERENCES 
 
 ALTER TABLE `rule` ADD CONSTRAINT `rule_fk1` FOREIGN KEY (`devide_id`) REFERENCES `device`(`device_id`);
 
-ALTER TABLE `rule` ADD CONSTRAINT `rule_fk2` FOREIGN KEY (`rule_type_id`) REFERENCES `rules_type`(`rule_type_id`);
+ALTER TABLE `rule` ADD CONSTRAINT `rule_fk2` FOREIGN KEY (`rule_type_id`) REFERENCES `rule_type`(`rule_type_id`);
 
 ALTER TABLE `event_message` ADD CONSTRAINT `event_message_fk0` FOREIGN KEY (`device_id`) REFERENCES `device`(`device_id`);
 
