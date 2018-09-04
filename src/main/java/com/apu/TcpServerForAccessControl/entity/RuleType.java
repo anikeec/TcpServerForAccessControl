@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "RulesType.findAll", query = "SELECT r FROM RulesType r")
     , @NamedQuery(name = "RulesType.findByRuleTypeId", query = "SELECT r FROM RulesType r WHERE r.ruleTypeId = :ruleTypeId")
     , @NamedQuery(name = "RulesType.findByDescription", query = "SELECT r FROM RulesType r WHERE r.description = :description")})
-public class RulesType implements Serializable {
+public class RuleType implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -47,10 +47,10 @@ public class RulesType implements Serializable {
     @OneToMany(mappedBy = "ruleTypeId", fetch = FetchType.LAZY)
     private Collection<Rule> ruleCollection;
 
-    public RulesType() {
+    public RuleType() {
     }
 
-    public RulesType(Integer ruleTypeId) {
+    public RuleType(Integer ruleTypeId) {
         this.ruleTypeId = ruleTypeId;
     }
 
@@ -89,10 +89,10 @@ public class RulesType implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof RulesType)) {
+        if (!(object instanceof RuleType)) {
             return false;
         }
-        RulesType other = (RulesType) object;
+        RuleType other = (RuleType) object;
         if ((this.ruleTypeId == null && other.ruleTypeId != null) || (this.ruleTypeId != null && !this.ruleTypeId.equals(other.ruleTypeId))) {
             return false;
         }
