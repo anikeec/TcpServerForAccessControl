@@ -44,8 +44,8 @@ public class InfoMessage implements Serializable {
     @Basic(optional = false)
     @Column(name = "info_mess_id")
     private Integer infoMessId;
-    @Size(max = 255)
-    @Column(name = "description")
+//    @Size(max = 255)
+    @Column(name = "description", length = 255)
     private String description;
     @Column(name = "date")
     @Temporal(TemporalType.TIMESTAMP)

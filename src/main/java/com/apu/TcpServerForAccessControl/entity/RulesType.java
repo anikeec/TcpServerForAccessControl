@@ -41,8 +41,8 @@ public class RulesType implements Serializable {
     @Basic(optional = false)
     @Column(name = "rule_type_id")
     private Integer ruleTypeId;
-    @Size(max = 255)
-    @Column(name = "description")
+//    @Size(max = 255)
+    @Column(name = "description", length = 255)
     private String description;
     @OneToMany(mappedBy = "ruleTypeId", fetch = FetchType.LAZY)
     private Collection<Rule> ruleCollection;

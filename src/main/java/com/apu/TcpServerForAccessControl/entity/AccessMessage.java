@@ -47,8 +47,8 @@ public class AccessMessage implements Serializable {
     @Basic(optional = false)
     @Column(name = "access_mess_id")
     private Integer accessMessId;
-    @Size(max = 255)
-    @Column(name = "description")
+//    @Size(max = 255)
+    @Column(name = "description", length = 255)
     private String description;
     @Column(name = "date")
     @Temporal(TemporalType.TIMESTAMP)

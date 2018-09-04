@@ -44,18 +44,18 @@ public class User implements Serializable {
     @Basic(optional = false)
     @Column(name = "user_id")
     private Integer userId;
-    @Size(max = 255)
-    @Column(name = "first_name")
+//    @Size(max = 255)
+    @Column(name = "first_name", length = 255)
     private String firstName;
-    @Size(max = 255)
-    @Column(name = "second_name")
+//    @Size(max = 255)
+    @Column(name = "second_name", length = 255)
     private String secondName;
-    @Size(max = 255)
-    @Column(name = "phone_number")
+//    @Size(max = 255)
+    @Column(name = "phone_number", length = 255)
     private String phoneNumber;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
-    @Size(max = 255)
-    @Column(name = "email")
+//    @Size(max = 255)
+    @Column(name = "email", length = 255)
     private String email;
     @OneToMany(mappedBy = "userId", fetch = FetchType.LAZY)
     private Collection<Card> cardCollection;

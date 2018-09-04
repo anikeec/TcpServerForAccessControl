@@ -43,8 +43,8 @@ public class Card implements Serializable {
     @Basic(optional = false)
     @Column(name = "card_id")
     private Integer cardId;
-    @Size(max = 255)
-    @Column(name = "card_number")
+//    @Size(max = 255)
+    @Column(name = "card_number", length = 255)
     private String cardNumber;
     @OneToMany(mappedBy = "cardId", fetch = FetchType.LAZY)
     private Collection<AccessMessage> accessMessageCollection;

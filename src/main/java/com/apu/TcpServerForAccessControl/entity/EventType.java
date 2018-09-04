@@ -41,8 +41,8 @@ public class EventType implements Serializable {
     @Basic(optional = false)
     @Column(name = "event_id")
     private Integer eventId;
-    @Size(max = 255)
-    @Column(name = "description")
+//    @Size(max = 255)
+    @Column(name = "description", length = 255)
     private String description;
     @OneToMany(mappedBy = "eventId", fetch = FetchType.LAZY)
     private Collection<AccessMessage> accessMessageCollection;
