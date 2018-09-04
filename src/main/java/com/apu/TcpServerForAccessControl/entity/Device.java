@@ -31,6 +31,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Device.findAll", query = "SELECT d FROM Device d")
     , @NamedQuery(name = "Device.findByDeviceId", query = "SELECT d FROM Device d WHERE d.deviceId = :deviceId")
+    , @NamedQuery(name = "Device.findByDeviceNumber", query = "SELECT d FROM Device d WHERE d.deviceNumber = :deviceNumber")
     , @NamedQuery(name = "Device.findByLastPacketId", query = "SELECT d FROM Device d WHERE d.lastPacketId = :lastPacketId")})
 public class Device implements Serializable {
 
@@ -40,6 +41,8 @@ public class Device implements Serializable {
     @Basic(optional = false)
     @Column(name = "device_id")
     private Integer deviceId;
+    @Column(name = "device_number")
+    private Integer deviceNumber;
     @Column(name = "last_packet_id")
     private Integer lastPacketId;
     @OneToMany(mappedBy = "deviceId", fetch = FetchType.LAZY)
@@ -64,6 +67,14 @@ public class Device implements Serializable {
 
     public void setDeviceId(Integer deviceId) {
         this.deviceId = deviceId;
+    }
+    
+    public Integer getDeviceNumber() {
+        return deviceNumber;
+    }
+
+    public void setDeviceNumber(Integer deviceNumber) {
+        this.deviceNumber = deviceNumber;
     }
 
     public Integer getLastPacketId() {
