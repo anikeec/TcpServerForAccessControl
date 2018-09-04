@@ -64,6 +64,7 @@
 	<int:payload-type-router input-channel="toEngineChannel">
 	    <int:mapping type="com.apu.TcpServerForAccessControlAPI.packet.ServicePacket" channel="toServiceEngineChannel" />
 	    <int:mapping type="com.apu.TcpServerForAccessControlAPI.packet.InfoPacket" channel="toInfoEngineChannel" />
+	    <int:mapping type="com.apu.TcpServerForAccessControlAPI.packet.AccessPacket" channel="toAccessEngineChannel" />
 	</int:payload-type-router>
 	
 	
@@ -83,12 +84,23 @@
                            ref="infoRulesEngine"
                            method="engine"
                            order="1"/>
+                           
+    <int:channel id="toAccessEngineChannel"/>
+    
+    <int:service-activator input-channel="toAccessEngineChannel"
+                           output-channel="toTcpClient"
+                           ref="accessRulesEngine"
+                           method="engine"
+                           order="2"/>
 	
 	<bean id="serviceRulesEngine"
           class="com.apu.TcpServerForAccessControl.utils.engine.ServiceRulesEngine"/>
 	
 	<bean id="infoRulesEngine"
           class="com.apu.TcpServerForAccessControl.utils.engine.InfoRulesEngine"/>	
+          
+    <bean id="accessRulesEngine"
+          class="com.apu.TcpServerForAccessControl.utils.engine.AccessRulesEngine"/>  
          
           
     <int:channel id="toLogging"/>
