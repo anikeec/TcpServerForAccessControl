@@ -26,14 +26,14 @@ public class MessageConverterTest {
     @Test
     public void testConvert() {
         RawPacket srcPacket = new InfoPacket();
-        srcPacket.setDeviceId(2);
+        srcPacket.setDeviceNumber(2);
         srcPacket.setPacketNumber(5);
         
         byte[] srcPacketStr = serializePacket(srcPacket);        
         RawPacket resultPacket = mc.convert(srcPacketStr);       
         
         assertTrue(
-                (resultPacket.getDeviceId().equals(srcPacket.getDeviceId())) &&
+                (resultPacket.getDeviceNumber().equals(srcPacket.getDeviceNumber())) &&
                 (resultPacket.getPacketNumber().equals(srcPacket.getPacketNumber()))
                 );
     }
