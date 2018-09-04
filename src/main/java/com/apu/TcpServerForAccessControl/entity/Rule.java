@@ -60,7 +60,7 @@ public class Rule implements Serializable {
     private Device devideId;
     @JoinColumn(name = "rule_type_id", referencedColumnName = "rule_type_id")
     @ManyToOne(fetch = FetchType.LAZY)
-    private RulesType ruleTypeId;
+    private RuleType ruleTypeId;
     @OneToMany(mappedBy = "ruleId", fetch = FetchType.LAZY)
     private Collection<EventMessage> eventMessageCollection;
 
@@ -111,11 +111,11 @@ public class Rule implements Serializable {
         this.devideId = devideId;
     }
 
-    public RulesType getRuleTypeId() {
+    public RuleType getRuleTypeId() {
         return ruleTypeId;
     }
 
-    public void setRuleTypeId(RulesType ruleTypeId) {
+    public void setRuleTypeId(RuleType ruleTypeId) {
         this.ruleTypeId = ruleTypeId;
     }
 
