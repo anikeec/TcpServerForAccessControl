@@ -6,12 +6,18 @@
 package com.apu.TcpServerForAccessControl.repository;
 
 import com.apu.TcpServerForAccessControl.entity.EventType;
+
+import java.util.List;
+
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 
 /**
  *
  * @author apu
  */
 public interface EventTypeRepository extends CrudRepository<EventType, Integer>{
+    
+    List<EventType> findByDescription(@Param("description") String description);
     
 }
