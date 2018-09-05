@@ -129,10 +129,12 @@ public class AccessRulesEngine {
         
         //get deviceId from DB
         Device device = null;
+        Integer lastPacketIdStored = null;
         if(retPacket == null) {
             List<Device> deviceList = deviceRepository.findByDeviceNumber(deviceNumber);
             if(deviceList.size() != 0) {
-                device = deviceList.get(0);//maybe I have to check to have only one deviceId with this deviceNumber            
+                device = deviceList.get(0);//maybe I have to check to have only one deviceId with this deviceNumber    
+                lastPacketIdStored = device.getLastPacketId();
             } else {
                 AccessMessageWrong accessMessWrong = 
                         new AccessMessageWrong(cardNumber, deviceNumber, eventId, dateTime, "wrong deviceNumber");
@@ -142,21 +144,22 @@ public class AccessRulesEngine {
         }
         
         //compare packetId with lastPacketId from DB 
-        Integer lastPacketIdStored = device.getLastPacketId();
-        if(lastPacketIdStored == null) {
-            lastPacketIdStored = 0;
-            device.setLastPacketId(lastPacketIdStored);
-            deviceRepository.save(device);
-        }
-        //add some mathematics links with borders of type
-        if(packetNumber == (lastPacketIdStored + 1)) {
-            device.setLastPacketId(packetNumber);
-            deviceRepository.save(device);
-        } else {
-            AccessMessageWrong accessMessWrong = 
-                    new AccessMessageWrong(cardNumber, deviceNumber, eventId, dateTime, "wrong packetId");
-            accessMessageWrongRepository.save(accessMessWrong);
-            retPacket = new InfoPacket("Received packetId is wrong");
+        if(retPacket == null) {
+            if(lastPacketIdStored == null) {
+                lastPacketIdStored = 0;
+                device.setLastPacketId(lastPacketIdStored);
+                deviceRepository.save(device);
+            }
+            //add some mathematics links with borders of type
+            if(packetNumber == (lastPacketIdStored + 1)) {
+                device.setLastPacketId(packetNumber);
+                deviceRepository.save(device);
+            } else {
+                AccessMessageWrong accessMessWrong = 
+                        new AccessMessageWrong(cardNumber, deviceNumber, eventId, dateTime, "wrong packetId");
+                accessMessageWrongRepository.save(accessMessWrong);
+                retPacket = new InfoPacket("Received packetId is wrong");
+            }
         }
         
         //get cardId from DB
@@ -175,14 +178,16 @@ public class AccessRulesEngine {
         
         //get eventType
         EventType eventType = null;
-        List<EventType> eventTypeList = eventTypeRepository.findByEventId(eventId);
-        if(eventTypeList.size() == 0) {
-            AccessMessageWrong accessMessWrong = 
-                    new AccessMessageWrong(cardNumber, deviceNumber, eventId, dateTime, "wrong eventId for this cardNumber");
-            accessMessageWrongRepository.save(accessMessWrong);
-            retPacket = new InfoPacket("Access denied for this cardNumber on this device. Wrong eventId.");
-        } else {
-            eventType = eventTypeList.get(0);   //maybe its wrong
+        if(retPacket == null) {
+            List<EventType> eventTypeList = eventTypeRepository.findByEventId(eventId);
+            if(eventTypeList.size() == 0) {
+                AccessMessageWrong accessMessWrong = 
+                        new AccessMessageWrong(cardNumber, deviceNumber, eventId, dateTime, "wrong eventId for this cardNumber");
+                accessMessageWrongRepository.save(accessMessWrong);
+                retPacket = new InfoPacket("Access denied for this cardNumber on this device. Wrong eventId.");
+            } else {
+                eventType = eventTypeList.get(0);   //maybe its wrong
+            }
         }
         
         //find in DB rules for combination deviceId+cardId - maybe it will be good to add eventId
@@ -206,15 +211,14 @@ public class AccessRulesEngine {
                     trueRuleList.add(rule);
                 }
             }
-        }
-        
-        //check if we have true rules
-        if(trueRuleList.size() == 0) {
-            AccessMessageWrong accessMessWrong = 
-                    new AccessMessageWrong(cardNumber, deviceNumber, eventId, dateTime, "wrong rule for this cardNumber");
-            accessMessageWrongRepository.save(accessMessWrong);
-            retPacket = new InfoPacket("Access denied for this cardNumber on this device");
-        }
+            //check if we have true rules
+            if(trueRuleList.size() == 0) {
+                AccessMessageWrong accessMessWrong = 
+                        new AccessMessageWrong(cardNumber, deviceNumber, eventId, dateTime, "wrong rule for this cardNumber");
+                accessMessageWrongRepository.save(accessMessWrong);
+                retPacket = new InfoPacket("Access denied for this cardNumber on this device");
+            }
+        }       
         
         //check time borders
         if(retPacket == null) {
@@ -250,7 +254,7 @@ public class AccessRulesEngine {
                     
                     //write to access_message
                     AccessMessage accessMess = 
-                            new AccessMessage(device, card, eventType, dateTime, "wrong rule for this cardNumber");
+                            new AccessMessage(device, card, eventType, dateTime, "Access OK");
                     accessMessageRepository.save(accessMess);
                     
                     //write to event_message
