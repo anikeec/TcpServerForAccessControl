@@ -68,6 +68,15 @@ public class AccessMessage implements Serializable {
     public AccessMessage() {
     }
 
+    public AccessMessage(Device deviceId, Card cardId, EventType eventId, Date date, String description) {
+        super();
+        this.description = description;
+        this.date = date;
+        this.cardId = cardId;
+        this.deviceId = deviceId;
+        this.eventId = eventId;
+    }
+
     public AccessMessage(Integer accessMessId) {
         this.accessMessId = accessMessId;
     }
