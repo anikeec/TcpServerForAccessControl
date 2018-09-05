@@ -172,22 +172,10 @@ public class AccessRulesEngine {
             }      
         }
         
-        //get ruleType from ruleTypeId by eventId
-        RuleType ruleType = null;
-        List<RuleType> ruleTypeList = ruleTypeRepository.findByRuleTypeId(eventId);
-        if(ruleTypeList.size() == 0) {
-            AccessMessageWrong accessMessWrong = 
-                    new AccessMessageWrong(cardNumber, deviceNumber, eventId, dateTime, "wrong ruleType(eventId)");
-            accessMessageWrongRepository.save(accessMessWrong);
-            retPacket = new InfoPacket("Received ruleType(eventId) is wrong");
-        } else {
-            ruleType = ruleTypeList.get(0);     //maybe I have to remake it
-        }
-        
         //find in DB rules for combination deviceId+cardId - maybe it will be good to add eventId
         List<Rule> ruleList = null;
         if(retPacket == null) {
-            ruleList = ruleRepository.findByDevideIdAndCardId(device.getDeviceId(), card.getCardId());
+            ruleList = ruleRepository.findByDeviceIdAndCardId(device, card);
             if(ruleList.size() == 0) {
                 AccessMessageWrong accessMessWrong = 
                         new AccessMessageWrong(cardNumber, deviceNumber, eventId, dateTime, "wrong rule for this cardNumber");
@@ -198,9 +186,12 @@ public class AccessRulesEngine {
         
         //find rules with appropriated ruleType (eventType in packet)
         List<Rule> trueRuleList = new ArrayList<>();
-        for(Rule rule:ruleList) {
-            if(rule.getRuleTypeId().getRuleTypeId() == eventId) {
-                trueRuleList.add(rule);
+        if(retPacket == null) {
+            for(Rule rule:ruleList) {
+                int ruleEventId = rule.getEventId().getEventId();
+                if(ruleEventId == eventId) {
+                    trueRuleList.add(rule);
+                }
             }
         }
         
@@ -246,9 +237,21 @@ public class AccessRulesEngine {
                 }
             }
             
+            //get eventType
+            EventType eventType = null;
+            List<EventType> eventTypeList = eventTypeRepository.findByEventId(eventId);
+            if(eventTypeList.size() == 0) {
+                AccessMessageWrong accessMessWrong = 
+                        new AccessMessageWrong(cardNumber, deviceNumber, eventId, dateTime, "wrong eventId for this cardNumber");
+                accessMessageWrongRepository.save(accessMessWrong);
+                retPacket = new InfoPacket("Access denied for this cardNumber on this device. Wrong eventId.");
+            } else {
+                eventType = eventTypeList.get(0);   //maybe its wrong
+            }
+            
             if((retPacket != null) && (retPacket instanceof AccessPacket)) {
                 AccessMessage accessMess = 
-                        new AccessMessage(device, card, ruleType, dateTime, "wrong rule for this cardNumber");
+                        new AccessMessage(device, card, eventType, dateTime, "wrong rule for this cardNumber");
                 accessMessageRepository.save(accessMess);
             } else {
                 AccessMessageWrong accessMessWrong = 
