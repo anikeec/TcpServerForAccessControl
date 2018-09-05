@@ -18,6 +18,7 @@ import org.springframework.data.repository.query.Param;
  */
 public interface EventTypeRepository extends CrudRepository<EventType, Integer>{
     
+    List<EventType> findByEventId(@Param("eventId") Integer eventId);
     List<EventType> findByDescription(@Param("description") String description);
     
 }
