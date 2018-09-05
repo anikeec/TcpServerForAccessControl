@@ -51,7 +51,8 @@ CREATE TABLE `event_type` (
 CREATE TABLE `rule` (
 	`rule_id` INT NOT NULL AUTO_INCREMENT,
 	`card_id` INT,
-	`devide_id` INT,
+	`device_id` INT,
+	`event_id` INT,
 	`rule_type_id` INT,
 	`date_begin` DATETIME,
 	`date_end` DATETIME,
@@ -99,9 +100,11 @@ ALTER TABLE `info_message` ADD CONSTRAINT `info_message_fk1` FOREIGN KEY (`event
 
 ALTER TABLE `rule` ADD CONSTRAINT `rule_fk0` FOREIGN KEY (`card_id`) REFERENCES `card`(`card_id`);
 
-ALTER TABLE `rule` ADD CONSTRAINT `rule_fk1` FOREIGN KEY (`devide_id`) REFERENCES `device`(`device_id`);
+ALTER TABLE `rule` ADD CONSTRAINT `rule_fk1` FOREIGN KEY (`device_id`) REFERENCES `device`(`device_id`);
 
-ALTER TABLE `rule` ADD CONSTRAINT `rule_fk2` FOREIGN KEY (`rule_type_id`) REFERENCES `rule_type`(`rule_type_id`);
+ALTER TABLE `rule` ADD CONSTRAINT `rule_fk2` FOREIGN KEY (`event_id`) REFERENCES `event_type`(`event_id`);
+
+ALTER TABLE `rule` ADD CONSTRAINT `rule_fk3` FOREIGN KEY (`rule_type_id`) REFERENCES `rule_type`(`rule_type_id`);
 
 ALTER TABLE `event_message` ADD CONSTRAINT `event_message_fk0` FOREIGN KEY (`device_id`) REFERENCES `device`(`device_id`);
 

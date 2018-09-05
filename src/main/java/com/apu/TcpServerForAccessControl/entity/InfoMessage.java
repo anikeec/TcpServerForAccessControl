@@ -54,7 +54,7 @@ public class InfoMessage implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     private Device deviceId;
     @JoinColumn(name = "event_id", referencedColumnName = "event_id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private EventType eventId;
 
     public InfoMessage() {

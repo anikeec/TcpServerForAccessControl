@@ -5,10 +5,15 @@
  */
 package com.apu.TcpServerForAccessControl.repository;
 
+import com.apu.TcpServerForAccessControl.entity.Card;
+import com.apu.TcpServerForAccessControl.entity.Device;
 import com.apu.TcpServerForAccessControl.entity.Rule;
 
 import java.util.List;
 
+import javax.persistence.NamedQuery;
+
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
@@ -18,6 +23,6 @@ import org.springframework.data.repository.query.Param;
  */
 public interface RuleRepository extends CrudRepository<Rule, Integer>{
     
-    List<Rule> findByDevideIdAndCardId(@Param("deviceId") Integer deviceId, @Param("cardId") Integer cardId);
+    List<Rule> findByDeviceIdAndCardId(@Param("deviceId") Device deviceId, @Param("cardId") Card cardId);
     
 }

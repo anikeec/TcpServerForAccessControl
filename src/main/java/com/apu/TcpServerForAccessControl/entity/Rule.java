@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Rule.findAll", query = "SELECT r FROM Rule r")
     , @NamedQuery(name = "Rule.findByRuleId", query = "SELECT r FROM Rule r WHERE r.ruleId = :ruleId")
-    , @NamedQuery(name = "Rule.findByDevideIdAndCardId", query = "SELECT r FROM Rule r WHERE r.deviceId = :deviceId AND r.cardId = :cardId")
+    , @NamedQuery(name = "Rule.findByDeviceIdAndCardId", query = "SELECT r FROM Rule r WHERE r.deviceId = :deviceId AND r.cardId = :cardId")
     , @NamedQuery(name = "Rule.findByDateBegin", query = "SELECT r FROM Rule r WHERE r.dateBegin = :dateBegin")
     , @NamedQuery(name = "Rule.findByDateEnd", query = "SELECT r FROM Rule r WHERE r.dateEnd = :dateEnd")})
 public class Rule implements Serializable {
@@ -56,11 +56,14 @@ public class Rule implements Serializable {
     @JoinColumn(name = "card_id", referencedColumnName = "card_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Card cardId;
-    @JoinColumn(name = "devide_id", referencedColumnName = "device_id")
+    @JoinColumn(name = "device_id", referencedColumnName = "device_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Device deviceId;
+    @JoinColumn(name = "event_id", referencedColumnName = "event_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    private EventType eventId;
     @JoinColumn(name = "rule_type_id", referencedColumnName = "rule_type_id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private RuleType ruleTypeId;
     @OneToMany(mappedBy = "ruleId", fetch = FetchType.LAZY)
     private Collection<EventMessage> eventMessageCollection;
@@ -104,12 +107,20 @@ public class Rule implements Serializable {
         this.cardId = cardId;
     }
 
-    public Device getDevideId() {
+    public Device getDeviceId() {
         return deviceId;
     }
 
-    public void setDevideId(Device deviceId) {
+    public void setDeviceId(Device deviceId) {
         this.deviceId = deviceId;
+    }
+    
+    public EventType getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(EventType eventId) {
+        this.eventId = eventId;
     }
 
     public RuleType getRuleTypeId() {

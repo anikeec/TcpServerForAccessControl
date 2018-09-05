@@ -47,7 +47,7 @@ public class Device implements Serializable {
     private Integer lastPacketId;
     @OneToMany(mappedBy = "deviceId", fetch = FetchType.LAZY)
     private Collection<AccessMessage> accessMessageCollection;
-    @OneToMany(mappedBy = "devideId", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "deviceId", fetch = FetchType.LAZY)
     private Collection<Rule> ruleCollection;
     @OneToMany(mappedBy = "deviceId", fetch = FetchType.LAZY)
     private Collection<EventMessage> eventMessageCollection;
