@@ -69,6 +69,16 @@ public class EventMessage implements Serializable {
     public EventMessage(Integer eventMessId) {
         this.eventMessId = eventMessId;
     }
+    
+    public EventMessage(Device deviceId, EventType eventId, AccessMessage baseAccessMessId, Rule ruleId, Date date, String description) {
+        super();
+        this.deviceId = deviceId;
+        this.eventId = eventId;
+        this.baseAccessMessId = baseAccessMessId;
+        this.ruleId = ruleId;
+        this.date = date;
+        this.description = description;               
+    }
 
     public Integer getEventMessId() {
         return eventMessId;
