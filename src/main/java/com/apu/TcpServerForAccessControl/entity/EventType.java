@@ -45,6 +45,8 @@ public class EventType implements Serializable {
     @Column(name = "description", length = 255)
     private String description;
     @OneToMany(mappedBy = "eventId", fetch = FetchType.LAZY)
+    private Collection<Rule> ruleCollection;
+    @OneToMany(mappedBy = "eventId", fetch = FetchType.LAZY)
     private Collection<AccessMessage> accessMessageCollection;
     @OneToMany(mappedBy = "eventId", fetch = FetchType.LAZY)
     private Collection<EventMessage> eventMessageCollection;
@@ -72,6 +74,15 @@ public class EventType implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+    
+    @XmlTransient
+    public Collection<Rule> getRuleCollection() {
+        return ruleCollection;
+    }
+
+    public void setRuleCollection(Collection<Rule> ruleCollection) {
+        this.ruleCollection = ruleCollection;
     }
 
     @XmlTransient
