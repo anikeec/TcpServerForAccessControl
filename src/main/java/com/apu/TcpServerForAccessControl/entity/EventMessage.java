@@ -57,7 +57,7 @@ public class EventMessage implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     private Device deviceId;
     @JoinColumn(name = "event_id", referencedColumnName = "event_id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private EventType eventId;
     @JoinColumn(name = "rule_id", referencedColumnName = "rule_id")
     @ManyToOne(fetch = FetchType.LAZY)
