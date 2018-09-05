@@ -36,6 +36,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Rule.findAll", query = "SELECT r FROM Rule r")
     , @NamedQuery(name = "Rule.findByRuleId", query = "SELECT r FROM Rule r WHERE r.ruleId = :ruleId")
+    , @NamedQuery(name = "Rule.findByDevideIdAndCardId", query = "SELECT r FROM Rule r WHERE r.deviceId = :deviceId AND r.cardId = :cardId")
     , @NamedQuery(name = "Rule.findByDateBegin", query = "SELECT r FROM Rule r WHERE r.dateBegin = :dateBegin")
     , @NamedQuery(name = "Rule.findByDateEnd", query = "SELECT r FROM Rule r WHERE r.dateEnd = :dateEnd")})
 public class Rule implements Serializable {
@@ -57,7 +58,7 @@ public class Rule implements Serializable {
     private Card cardId;
     @JoinColumn(name = "devide_id", referencedColumnName = "device_id")
     @ManyToOne(fetch = FetchType.LAZY)
-    private Device devideId;
+    private Device deviceId;
     @JoinColumn(name = "rule_type_id", referencedColumnName = "rule_type_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private RuleType ruleTypeId;
@@ -104,11 +105,11 @@ public class Rule implements Serializable {
     }
 
     public Device getDevideId() {
-        return devideId;
+        return deviceId;
     }
 
-    public void setDevideId(Device devideId) {
-        this.devideId = devideId;
+    public void setDevideId(Device deviceId) {
+        this.deviceId = deviceId;
     }
 
     public RuleType getRuleTypeId() {
