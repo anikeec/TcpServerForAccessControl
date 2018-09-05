@@ -27,12 +27,12 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author apu
  */
 @Entity
-@Table(name = "rules_type")
+@Table(name = "rule_type")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "RulesType.findAll", query = "SELECT r FROM RulesType r")
-    , @NamedQuery(name = "RulesType.findByRuleTypeId", query = "SELECT r FROM RulesType r WHERE r.ruleTypeId = :ruleTypeId")
-    , @NamedQuery(name = "RulesType.findByDescription", query = "SELECT r FROM RulesType r WHERE r.description = :description")})
+    @NamedQuery(name = "RuleType.findAll", query = "SELECT r FROM RuleType r")
+    , @NamedQuery(name = "RuleType.findByRuleTypeId", query = "SELECT r FROM RuleType r WHERE r.ruleTypeId = :ruleTypeId")
+    , @NamedQuery(name = "RuleType.findByDescription", query = "SELECT r FROM RuleType r WHERE r.description = :description")})
 public class RuleType implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -101,7 +101,7 @@ public class RuleType implements Serializable {
 
     @Override
     public String toString() {
-        return "com.apu.TcpServerForAccessControl.entity.RulesType[ ruleTypeId=" + ruleTypeId + " ]";
+        return "com.apu.TcpServerForAccessControl.entity.RuleType[ ruleTypeId=" + ruleTypeId + " ]";
     }
     
 }
