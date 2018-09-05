@@ -15,6 +15,7 @@ import com.apu.TcpServerForAccessControl.entity.AccessMessage;
 import com.apu.TcpServerForAccessControl.entity.AccessMessageWrong;
 import com.apu.TcpServerForAccessControl.entity.Card;
 import com.apu.TcpServerForAccessControl.entity.Device;
+import com.apu.TcpServerForAccessControl.entity.EventMessage;
 import com.apu.TcpServerForAccessControl.entity.EventType;
 import com.apu.TcpServerForAccessControl.entity.Rule;
 import com.apu.TcpServerForAccessControl.entity.RuleType;
@@ -172,6 +173,18 @@ public class AccessRulesEngine {
             }      
         }
         
+        //get eventType
+        EventType eventType = null;
+        List<EventType> eventTypeList = eventTypeRepository.findByEventId(eventId);
+        if(eventTypeList.size() == 0) {
+            AccessMessageWrong accessMessWrong = 
+                    new AccessMessageWrong(cardNumber, deviceNumber, eventId, dateTime, "wrong eventId for this cardNumber");
+            accessMessageWrongRepository.save(accessMessWrong);
+            retPacket = new InfoPacket("Access denied for this cardNumber on this device. Wrong eventId.");
+        } else {
+            eventType = eventTypeList.get(0);   //maybe its wrong
+        }
+        
         //find in DB rules for combination deviceId+cardId - maybe it will be good to add eventId
         List<Rule> ruleList = null;
         if(retPacket == null) {
@@ -213,46 +226,46 @@ public class AccessRulesEngine {
                     if((dateTime.getTime() >= dateBegin.getTime()) && 
                        (dateTime.getTime() <= dateEnd.getTime())) {
                       //access allow
-                        List<EventType> eventTypeList = eventTypeRepository.findByDescription(
+                        List<EventType> eventTypeListTemp = eventTypeRepository.findByDescription(
                                 com.apu.TcpServerForAccessControlAPI.packet.EventType.ACCESS_ALLOW.toString());
                         
                         AccessPacket accessPacket = new AccessPacket();                    
                         accessPacket.setDeviceNumber(deviceNumber);
                         accessPacket.setPacketNumber(packetNumber);
                         accessPacket.setTime(new Date());
-                        accessPacket.setEventId(eventTypeList.get(0).getEventId());                    
+                        accessPacket.setEventId(eventTypeListTemp.get(0).getEventId());                    
                         retPacket = accessPacket;
                     }
                 } else {
                     //access allow
-                    List<EventType> eventTypeList = eventTypeRepository.findByDescription(
+                    List<EventType> eventTypeListTemp = eventTypeRepository.findByDescription(
                             com.apu.TcpServerForAccessControlAPI.packet.EventType.ACCESS_ALLOW.toString());
                     
                     AccessPacket accessPacket = new AccessPacket();                    
                     accessPacket.setDeviceNumber(deviceNumber);
                     accessPacket.setPacketNumber(packetNumber);
                     accessPacket.setTime(new Date());
-                    accessPacket.setEventId(eventTypeList.get(0).getEventId());                    
+                    accessPacket.setEventId(eventTypeListTemp.get(0).getEventId());                    
                     retPacket = accessPacket;
+                    
+                    //write to access_message
+                    AccessMessage accessMess = 
+                            new AccessMessage(device, card, eventType, dateTime, "wrong rule for this cardNumber");
+                    accessMessageRepository.save(accessMess);
+                    
+                    //write to event_message
+                    EventMessage eventMessage = 
+                            new EventMessage(device, eventTypeListTemp.get(0), accessMess, rule, new Date(), "Access allow");                  
+                    eventMessageRepository.save(eventMessage);
                 }
             }
             
-            //get eventType
-            EventType eventType = null;
-            List<EventType> eventTypeList = eventTypeRepository.findByEventId(eventId);
-            if(eventTypeList.size() == 0) {
-                AccessMessageWrong accessMessWrong = 
-                        new AccessMessageWrong(cardNumber, deviceNumber, eventId, dateTime, "wrong eventId for this cardNumber");
-                accessMessageWrongRepository.save(accessMessWrong);
-                retPacket = new InfoPacket("Access denied for this cardNumber on this device. Wrong eventId.");
-            } else {
-                eventType = eventTypeList.get(0);   //maybe its wrong
-            }
+            
             
             if((retPacket != null) && (retPacket instanceof AccessPacket)) {
-                AccessMessage accessMess = 
-                        new AccessMessage(device, card, eventType, dateTime, "wrong rule for this cardNumber");
-                accessMessageRepository.save(accessMess);
+//                AccessMessage accessMess = 
+//                        new AccessMessage(device, card, eventType, dateTime, "wrong rule for this cardNumber");
+//                accessMessageRepository.save(accessMess);
             } else {
                 AccessMessageWrong accessMessWrong = 
                         new AccessMessageWrong(cardNumber, deviceNumber, eventId, dateTime, "wrong rule for this cardNumber");
