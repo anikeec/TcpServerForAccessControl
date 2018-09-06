@@ -50,10 +50,10 @@ public class AccessMessageWrong implements Serializable {
     private String cardNumber;
     @Basic(optional = false)
     @Column(name = "device_number")
-    private int deviceNumber;
+    private Integer deviceNumber;
     @Basic(optional = false)
     @Column(name = "event_id")
-    private int eventId;
+    private Integer eventId;
     @Basic(optional = false)
 //    @Size(min = 1, max = 255)
     @Column(name = "description", length = 255)
@@ -70,7 +70,7 @@ public class AccessMessageWrong implements Serializable {
         this.accessMessId = accessMessId;
     }
     
-    public AccessMessageWrong(String cardNumber, int deviceNumber, int eventId, Date date, String description) {
+    public AccessMessageWrong(String cardNumber, Integer deviceNumber, Integer eventId, Date date, String description) {
         this.cardNumber = cardNumber;
         this.deviceNumber = deviceNumber;
         this.eventId = eventId;
@@ -78,7 +78,7 @@ public class AccessMessageWrong implements Serializable {
         this.date = date;
     }
 
-    public AccessMessageWrong(Integer accessMessId, String cardNumber, int deviceNumber, int eventId, String description, Date date) {
+    public AccessMessageWrong(Integer accessMessId, String cardNumber, Integer deviceNumber, Integer eventId, String description, Date date) {
         this.accessMessId = accessMessId;
         this.cardNumber = cardNumber;
         this.deviceNumber = deviceNumber;
@@ -103,19 +103,19 @@ public class AccessMessageWrong implements Serializable {
         this.cardNumber = cardNumber;
     }
 
-    public int getDeviceNumber() {
+    public Integer getDeviceNumber() {
         return deviceNumber;
     }
 
-    public void setDeviceId(int deviceNumber) {
+    public void setDeviceId(Integer deviceNumber) {
         this.deviceNumber = deviceNumber;
     }
 
-    public int getEventId() {
+    public Integer getEventId() {
         return eventId;
     }
 
-    public void setEventId(int eventId) {
+    public void setEventId(Integer eventId) {
         this.eventId = eventId;
     }
 
