@@ -122,5 +122,14 @@
 	<int:transformer id="errorHandler"
 					 input-channel="errorChannel"
 					 expression="payload.failedMessage.payload + ':' + payload.cause.message"/>
+					 
+	<bean id="dataSource" destroy-method="close" class="org.apache.commons.dbcp2.BasicDataSource">
+	    <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+	    <property name="url" value="jdbc:mysql://localhost:3306/accesscontroldb"/>
+	    <property name="username" value="app"/>
+	    <property name="password" value="qwerty"/>
+	    <property name="initialSize" value="5"/>
+	</bean>		
+	
 
 </beans>
