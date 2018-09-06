@@ -5,7 +5,7 @@
 
 	<groupId>com.apu</groupId>
 	<artifactId>TcpServerForAccessControl</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.2</version>
 	<packaging>jar</packaging>
 
 	<name>TcpServerForAccessControl</name>
@@ -28,6 +28,11 @@
 	   <dependency>
             <groupId>com.apu</groupId>
             <artifactId>TcpServerForAccessControlAPI</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.apu</groupId>
+            <artifactId>TcpServerForAccessControlDB</artifactId>
             <version>0.0.1</version>
         </dependency>
 		<dependency>
