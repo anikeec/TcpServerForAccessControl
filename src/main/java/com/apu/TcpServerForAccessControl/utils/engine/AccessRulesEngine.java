@@ -72,6 +72,8 @@ public class AccessRulesEngine {
         
         RawPacket retPacket = null;
         
+        logger.info("Time: " + System.currentTimeMillis() + " ms.");
+        
         /*
          * here we have to:
          * - get packetId from message
@@ -151,15 +153,15 @@ public class AccessRulesEngine {
                 deviceRepository.save(device);
             }
             //add some mathematics links with borders of type
-            if(packetNumber == (lastPacketIdStored + 1)) {
-                device.setLastPacketId(packetNumber);
-                deviceRepository.save(device);
-            } else {
-                AccessMessageWrong accessMessWrong = 
-                        new AccessMessageWrong(cardNumber, deviceNumber, eventId, dateTime, "wrong packetId");
-                accessMessageWrongRepository.save(accessMessWrong);
-                retPacket = new InfoPacket("Received packetId is wrong");
-            }
+//            if(packetNumber == (lastPacketIdStored + 1)) {
+//                device.setLastPacketId(packetNumber);
+//                deviceRepository.save(device);
+//            } else {
+//                AccessMessageWrong accessMessWrong = 
+//                        new AccessMessageWrong(cardNumber, deviceNumber, eventId, dateTime, "wrong packetId");
+//                accessMessageWrongRepository.save(accessMessWrong);
+//                retPacket = new InfoPacket("Received packetId is wrong");
+//            }
         }
         
         //get cardId from DB
@@ -278,6 +280,8 @@ public class AccessRulesEngine {
             }
         }
         
+        
+        logger.info("Time: " + System.currentTimeMillis() + " ms.");
         String msg;        
         msg = "AccessRulesEngine answer - PacketType: " + message.getMessageType();
         logger.info(msg);

@@ -31,7 +31,7 @@ public class MessageConverter {
             logger.error(ExceptionUtils.getStackTrace(e));
         }
         
-//        logger.info("Message: " + message);
+        logger.info("Time: " + System.currentTimeMillis() + " ms.");
         return pkt;
     }
     
@@ -43,7 +43,7 @@ public class MessageConverter {
             logger.error(ExceptionUtils.getStackTrace(e));
         }
         
-//        logger.info("Message: " + message);
+        logger.info("Time: " + System.currentTimeMillis() + " ms.");
         return packetBytes;
     }
     
