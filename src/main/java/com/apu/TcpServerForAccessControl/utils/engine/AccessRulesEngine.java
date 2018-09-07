@@ -1,5 +1,6 @@
 package com.apu.TcpServerForAccessControl.utils.engine;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -72,7 +73,7 @@ public class AccessRulesEngine {
         
         RawPacket retPacket = null;
         
-        logger.info("Time: " + System.currentTimeMillis() + " ms.");
+//        logger.info("Time: " + System.currentTimeMillis() + " ms.");
         
         /*
          * here we have to:
@@ -122,170 +123,30 @@ public class AccessRulesEngine {
             retPacket = new InfoPacket("Received packet is wrong");
         }
         
-        //check if packet wrong and write it to access_message_wrong table
-        if(retPacket != null) {
-            AccessMessageWrong accessMessWrong = 
-                    new AccessMessageWrong(cardNumber, deviceNumber, eventId, dateTime, "wrong packet");
-            accessMessageWrongRepository.save(accessMessWrong);
-        }
-        
-        //get deviceId from DB
-        Device device = null;
-        Integer lastPacketIdStored = null;
-        if(retPacket == null) {
-            List<Device> deviceList = deviceRepository.findByDeviceNumber(deviceNumber);
-            if(deviceList.size() != 0) {
-                device = deviceList.get(0);//maybe I have to check to have only one deviceId with this deviceNumber    
-                lastPacketIdStored = device.getLastPacketId();
-            } else {
-                AccessMessageWrong accessMessWrong = 
-                        new AccessMessageWrong(cardNumber, deviceNumber, eventId, dateTime, "wrong deviceNumber");
-                accessMessageWrongRepository.save(accessMessWrong);
-                retPacket = new InfoPacket("Received deviceNumber is wrong");
-            }
-        }
-        
         //compare packetId with lastPacketId from DB 
-        if(retPacket == null) {
-            if(lastPacketIdStored == null) {
-                lastPacketIdStored = 0;
-                device.setLastPacketId(lastPacketIdStored);
-                deviceRepository.save(device);
-            }
-            //add some mathematics links with borders of type
-//            if(packetNumber == (lastPacketIdStored + 1)) {
-//                device.setLastPacketId(packetNumber);
-//                deviceRepository.save(device);
-//            } else {
-//                AccessMessageWrong accessMessWrong = 
-//                        new AccessMessageWrong(cardNumber, deviceNumber, eventId, dateTime, "wrong packetId");
-//                accessMessageWrongRepository.save(accessMessWrong);
-//                retPacket = new InfoPacket("Received packetId is wrong");
-//            }
+        
+        Integer amountRules = ruleRepository.findByCardDeviceEvent(cardNumber, deviceNumber, eventId);
+        
+        if(amountRules.intValue()>0) {
+            AccessPacket accessPacket = new AccessPacket();                    
+            accessPacket.setDeviceNumber(deviceNumber);
+            accessPacket.setPacketNumber(packetNumber);
+            accessPacket.setTime(new Date());
+            accessPacket.setEventId(eventId);                    
+            retPacket = accessPacket;
+            //'2018-09-06 18:25:28'
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//            df.setTimeZone(TIMEZONE_UTC);
+            String dateStr = df.format(new Date());
+            accessMessageRepository.insertMessage(cardNumber, deviceNumber, eventId, "Allow access", new Date());
+        } else {
+            AccessMessageWrong accessMessWrong = 
+                    new AccessMessageWrong(cardNumber, deviceNumber, eventId, dateTime, "wrong deviceNumber");
+            accessMessageWrongRepository.save(accessMessWrong);
+            retPacket = new InfoPacket("Received deviceNumber is wrong");
         }
-        
-        //get cardId from DB
-        Card card = null;
-        if(retPacket == null) {
-            List<Card> cardList = cardRepository.findByCardNumber(cardNumber);
-            if(cardList.size() != 0) {
-                card = cardList.get(0);//maybe I have to check to have only one cardId with this cardNumber            
-            } else {
-                AccessMessageWrong accessMessWrong = 
-                        new AccessMessageWrong(cardNumber, deviceNumber, eventId, dateTime, "wrong cardNumber");
-                accessMessageWrongRepository.save(accessMessWrong);
-                retPacket = new InfoPacket("Received cardNumber is wrong");
-            }      
-        }
-        
-        //get eventType
-        EventType eventType = null;
-        if(retPacket == null) {
-            List<EventType> eventTypeList = eventTypeRepository.findByEventId(eventId);
-            if(eventTypeList.size() == 0) {
-                AccessMessageWrong accessMessWrong = 
-                        new AccessMessageWrong(cardNumber, deviceNumber, eventId, dateTime, "wrong eventId for this cardNumber");
-                accessMessageWrongRepository.save(accessMessWrong);
-                retPacket = new InfoPacket("Access denied for this cardNumber on this device. Wrong eventId.");
-            } else {
-                eventType = eventTypeList.get(0);   //maybe its wrong
-            }
-        }
-        
-        //find in DB rules for combination deviceId+cardId - maybe it will be good to add eventId
-        List<Rule> ruleList = null;
-        if(retPacket == null) {
-            ruleList = ruleRepository.findByDeviceIdAndCardId(device, card);
-            if(ruleList.size() == 0) {
-                AccessMessageWrong accessMessWrong = 
-                        new AccessMessageWrong(cardNumber, deviceNumber, eventId, dateTime, "wrong rule for this cardNumber");
-                accessMessageWrongRepository.save(accessMessWrong);
-                retPacket = new InfoPacket("Access denied for this cardNumber on this device");
-            }
-        }
-        
-        //find rules with appropriated ruleType (eventType in packet)
-        List<Rule> trueRuleList = new ArrayList<>();
-        if(retPacket == null) {
-            for(Rule rule:ruleList) {
-                int ruleEventId = rule.getEventId().getEventId();
-                if(ruleEventId == eventId) {
-                    trueRuleList.add(rule);
-                }
-            }
-            //check if we have true rules
-            if(trueRuleList.size() == 0) {
-                AccessMessageWrong accessMessWrong = 
-                        new AccessMessageWrong(cardNumber, deviceNumber, eventId, dateTime, "wrong rule for this cardNumber");
-                accessMessageWrongRepository.save(accessMessWrong);
-                retPacket = new InfoPacket("Access denied for this cardNumber on this device");
-            }
-        }       
-        
-        //check time borders
-        if(retPacket == null) {
-            for(Rule rule:trueRuleList) {
-                Date dateBegin = rule.getDateBegin();
-                Date dateEnd = rule.getDateEnd();
-                if((dateBegin != null) && 
-                   (dateEnd != null)) {
-                    if((dateTime.getTime() >= dateBegin.getTime()) && 
-                       (dateTime.getTime() <= dateEnd.getTime())) {
-                      //access allow
-                        List<EventType> eventTypeListTemp = eventTypeRepository.findByDescription(
-                                com.apu.TcpServerForAccessControlAPI.packet.EventType.ACCESS_ALLOW.toString());
-                        
-                        AccessPacket accessPacket = new AccessPacket();                    
-                        accessPacket.setDeviceNumber(deviceNumber);
-                        accessPacket.setPacketNumber(packetNumber);
-                        accessPacket.setTime(new Date());
-                        accessPacket.setEventId(eventTypeListTemp.get(0).getEventId());                    
-                        retPacket = accessPacket;
-                    }
-                } else {
-                    //access allow
-                    List<EventType> eventTypeListTemp = eventTypeRepository.findByDescription(
-                            com.apu.TcpServerForAccessControlAPI.packet.EventType.ACCESS_ALLOW.toString());
-                    
-                    AccessPacket accessPacket = new AccessPacket();                    
-                    accessPacket.setDeviceNumber(deviceNumber);
-                    accessPacket.setPacketNumber(packetNumber);
-                    accessPacket.setTime(new Date());
-                    accessPacket.setEventId(eventTypeListTemp.get(0).getEventId());                    
-                    retPacket = accessPacket;
-                    
-                    //write to access_message
-                    AccessMessage accessMess = 
-                            new AccessMessage(device, card, eventType, dateTime, "Access OK");
-                    accessMessageRepository.save(accessMess);
-                    
-                    //write to event_message
-                    EventMessage eventMessage = 
-                            new EventMessage(device, eventTypeListTemp.get(0), accessMess, rule, new Date(), "Access allow");                  
-                    eventMessageRepository.save(eventMessage);
-                }
-            }
-            
-            
-            
-            if((retPacket != null) && (retPacket instanceof AccessPacket)) {
-//                AccessMessage accessMess = 
-//                        new AccessMessage(device, card, eventType, dateTime, "wrong rule for this cardNumber");
-//                accessMessageRepository.save(accessMess);
-            } else {
-                AccessMessageWrong accessMessWrong = 
-                        new AccessMessageWrong(cardNumber, deviceNumber, eventId, dateTime, "wrong rule for this cardNumber");
-                accessMessageWrongRepository.save(accessMessWrong);
-                retPacket = new InfoPacket("Access denied for this cardNumber on this device");
-            }
-        }
-        
-        
-        logger.info("Time: " + System.currentTimeMillis() + " ms.");
-        String msg;        
-        msg = "AccessRulesEngine answer - PacketType: " + message.getMessageType();
-        logger.info(msg);
         return retPacket;
+       
     }
-
+    
 }
