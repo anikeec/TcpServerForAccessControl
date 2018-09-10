@@ -15,7 +15,8 @@
 
 	<int-ip:tcp-connection-factory id="crLfServer"
 								   type="server"
-								   port="65530"/>
+								   port="65530"
+								   using-nio="true"/>
     
     <int-ip:tcp-outbound-channel-adapter id="outboundServer"
         channel="tcpOutputChannel"
@@ -36,17 +37,26 @@
 	    connection-factory="crLfServer"/>
 
 	<int:channel id="tcpInputChannel">
-	   <int:interceptors>
-	       <int:wire-tap channel="toLogging"/> 
-	   </int:interceptors>
+<!-- 	   <int:interceptors> -->
+<!-- 	       <int:wire-tap channel="toLogging"/>  -->
+<!-- 	   </int:interceptors> -->
 	</int:channel>
-		
+	
+	<!-- temp -->
+<!-- 	<int:chain input-channel="tcpInputChannel" output-channel="tcpOutputChannel"> -->
+<!--        <int:transformer ref="messageEcho" method="echo"/> -->
+<!--      </int:chain> -->
+<!--      <bean id="messageEcho" -->
+<!--           class="com.apu.TcpServerForAccessControl.utils.message.MessageEcho"/> -->
+    <!-- tempFinish -->
 	
 	<int:chain input-channel="tcpInputChannel" output-channel="toEngineChannel">
 	   <int:transformer ref="messageChecker" method="check"/>
 	   <int:transformer ref="messageDecoder" method="decode"/>
 	   <int:transformer ref="messageConverter" method="convert"/>
 	 </int:chain>
+	 
+	 <int:channel id="toEngineChannel"/>
 	
 	<bean id="messageChecker"
           class="com.apu.TcpServerForAccessControl.utils.message.MessageChecker"/>
@@ -83,7 +93,7 @@
                            output-channel="toTcpClient"
                            ref="infoRulesEngine"
                            method="engine"
-                           order="1"/>
+                           order="3"/>
                            
     <int:channel id="toAccessEngineChannel"/>
     
@@ -91,7 +101,7 @@
                            output-channel="toTcpClient"
                            ref="accessRulesEngine"
                            method="engine"
-                           order="2"/>
+                           order="1"/>
 	
 	<bean id="serviceRulesEngine"
           class="com.apu.TcpServerForAccessControl.utils.engine.ServiceRulesEngine"/>
@@ -118,6 +128,8 @@
 
 <!-- 	<bean id="echoService" -->
 <!-- 		  class="com.apu.TcpServerForAccessControl.EchoService"/> -->
+
+	<int:channel id="errorChannel"/>
 
 	<int:transformer id="errorHandler"
 					 input-channel="errorChannel"
