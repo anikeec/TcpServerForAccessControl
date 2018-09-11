@@ -121,7 +121,7 @@ public class AccessRulesEngine {
            (cardNumber == null) ||
            (dateTime == null)) {
             retPacket = new InfoPacket("Received packet is wrong");
-        }
+        }       
         
         //compare packetId with lastPacketId from DB 
         
@@ -138,7 +138,7 @@ public class AccessRulesEngine {
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 //            df.setTimeZone(TIMEZONE_UTC);
             String dateStr = df.format(new Date());
-            accessMessageRepository.insertMessage(cardNumber, deviceNumber, eventId, "Allow access", new Date());
+//            accessMessageRepository.insertMessage(deviceNumber, eventId, "Allow access", new Date());
         } else {
             AccessMessageWrong accessMessWrong = 
                     new AccessMessageWrong(cardNumber, deviceNumber, eventId, dateTime, "wrong deviceNumber");
