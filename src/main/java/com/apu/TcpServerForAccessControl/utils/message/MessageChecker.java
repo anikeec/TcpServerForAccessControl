@@ -10,7 +10,7 @@ public class MessageChecker {
     private static final Logger logger = LogManager.getLogger(MessageChecker.class);
     
     public byte[] check(byte[] message) {
-        logger.info("Time: " + System.currentTimeMillis() + " ms.");
+//        logger.info("Time: " + System.currentTimeMillis() + " ms.");
         return message;
     }
 
