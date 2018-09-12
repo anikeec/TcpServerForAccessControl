@@ -37,18 +37,18 @@
         <Logger name="outLog" level="ALL" additivity="false">
             <AppenderRef ref="LOGDEBUG" />
         </Logger>	    
-		<Logger name="org.springframework.integration" level="debug" additivity="false">
-	        <AppenderRef ref="ASYNC" />
-	    </Logger>    
-        <Logger name="org.springframework" level="debug" additivity="false">
-            <AppenderRef ref="ASYNC" />
-        </Logger>
-        <Logger name="org.springframework.integration.handler.LoggingHandler" level="info" additivity="false">
-            <AppenderRef ref="ASYNC" />
-        </Logger>
-        <Logger name="org.springframework.integration.samples" level="debug" additivity="false">
-            <AppenderRef ref="ASYNC" />
-        </Logger>
+<!-- 		<Logger name="org.springframework.integration" level="debug" additivity="false"> -->
+<!-- 	        <AppenderRef ref="ASYNC" /> -->
+<!-- 	    </Logger>     -->
+<!--         <Logger name="org.springframework" level="debug" additivity="false"> -->
+<!--             <AppenderRef ref="ASYNC" /> -->
+<!--         </Logger> -->
+<!--         <Logger name="org.springframework.integration.handler.LoggingHandler" level="info" additivity="false"> -->
+<!--             <AppenderRef ref="ASYNC" /> -->
+<!--         </Logger> -->
+<!--         <Logger name="org.springframework.integration.samples" level="debug" additivity="false"> -->
+<!--             <AppenderRef ref="ASYNC" /> -->
+<!--         </Logger> -->
         <Root level="all">
             <AppenderRef ref="ASYNC" />
         </Root>
