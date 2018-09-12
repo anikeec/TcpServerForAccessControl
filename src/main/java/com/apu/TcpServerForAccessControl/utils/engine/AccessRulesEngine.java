@@ -294,12 +294,12 @@ public class AccessRulesEngine {
                     //write to access_message
                     AccessMessage accessMess = 
                             new AccessMessage(device, card, eventType, dateTime, "Access OK");
-//                    accessMessageRepository.save(accessMess);
+                    accessMessageRepository.save(accessMess);
                     
                     //write to event_message
                     EventMessage eventMessage = 
                             new EventMessage(device, eventTypeListTemp.get(0), accessMess, rule, new Date(), "Access allow");                  
-//                    eventMessageRepository.save(eventMessage);
+                    eventMessageRepository.save(eventMessage);
                 }
             }
             
