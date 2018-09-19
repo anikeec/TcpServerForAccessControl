@@ -7,6 +7,7 @@ CREATE TABLE `user` (
 	`phone_number` VARCHAR(255),
 	`email` VARCHAR(255),
 	`password` VARCHAR(255),
+	`active` BOOLEAN DEFAULT FALSE,
 	PRIMARY KEY (`user_id`)
 );
 
@@ -14,6 +15,7 @@ CREATE TABLE `card` (
 	`card_id` INT NOT NULL AUTO_INCREMENT,
 	`card_number` VARCHAR(255),
 	`user_id` INT,
+	`active` BOOLEAN DEFAULT FALSE,
 	PRIMARY KEY (`card_id`)
 );
 
@@ -21,6 +23,7 @@ CREATE TABLE `device` (
 	`device_id` INT NOT NULL AUTO_INCREMENT,
 	`device_number` INT,
 	`last_packet_id` INT,
+	`active` BOOLEAN DEFAULT FALSE,
 	PRIMARY KEY (`device_id`)
 );
 
@@ -57,6 +60,7 @@ CREATE TABLE `rule` (
 	`rule_type_id` INT,
 	`date_begin` DATETIME,
 	`date_end` DATETIME,
+	`active` BOOLEAN DEFAULT FALSE,
 	PRIMARY KEY (`rule_id`)
 );
 
