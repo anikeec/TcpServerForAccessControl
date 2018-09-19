@@ -7,23 +7,23 @@ CREATE TABLE `user` (
 	`phone_number` VARCHAR(255),
 	`email` VARCHAR(255),
 	`password` VARCHAR(255),
-	`active` BOOLEAN DEFAULT FALSE,
+	`active` BOOLEAN NOT NULL DEFAULT FALSE,
 	PRIMARY KEY (`user_id`)
 );
 
 CREATE TABLE `card` (
 	`card_id` INT NOT NULL AUTO_INCREMENT,
-	`card_number` VARCHAR(255),
-	`user_id` INT,
-	`active` BOOLEAN DEFAULT FALSE,
+	`card_number` VARCHAR(255) NOT NULL,
+	`user_id` INT NOT NULL,
+	`active` BOOLEAN NOT NULL DEFAULT FALSE,
 	PRIMARY KEY (`card_id`)
 );
 
 CREATE TABLE `device` (
 	`device_id` INT NOT NULL AUTO_INCREMENT,
-	`device_number` INT,
-	`last_packet_id` INT,
-	`active` BOOLEAN DEFAULT FALSE,
+	`device_number` INT NOT NULL,
+	`last_packet_id` INT  NOT NULL DEFAULT 0,
+	`active` BOOLEAN NOT NULL DEFAULT FALSE,
 	PRIMARY KEY (`device_id`)
 );
 
@@ -48,7 +48,7 @@ CREATE TABLE `info_message` (
 
 CREATE TABLE `event_type` (
 	`event_id` INT NOT NULL AUTO_INCREMENT,
-	`description` VARCHAR(255),
+	`description` VARCHAR(255) NOT NULL,
 	PRIMARY KEY (`event_id`)
 );
 
@@ -66,7 +66,7 @@ CREATE TABLE `rule` (
 
 CREATE TABLE `rule_type` (
 	`rule_type_id` INT NOT NULL AUTO_INCREMENT,
-	`description` VARCHAR(255),
+	`description` VARCHAR(255) NOT NULL,
 	PRIMARY KEY (`rule_type_id`)
 );
 
