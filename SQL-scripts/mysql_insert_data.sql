@@ -1,6 +1,6 @@
 use accesscontroldb;
 
-INSERT INTO user(user_id, first_name, second_name, phone_number, email) VALUES(1, "Peter", "Petrov", "0501234567", "petrov@gmail.com");
+INSERT INTO system_user(user_id, first_name, second_name, phone_number, email) VALUES(1, "Peter", "Petrov", "0501234567", "petrov@gmail.com");
 
 INSERT INTO card(card_id, card_number, user_id) VALUES(1, "11111111", 1);
 
