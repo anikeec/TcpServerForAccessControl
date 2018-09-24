@@ -140,10 +140,10 @@
 					 expression="payload.failedMessage.payload + ':' + payload.cause.message"/>
 					 
 	<bean id="dataSource" destroy-method="close" class="org.apache.commons.dbcp2.BasicDataSource">
-	    <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-	    <property name="url" value="jdbc:mysql://localhost:3306/accesscontroldb"/>
-	    <property name="username" value="app"/>
-	    <property name="password" value="qwerty"/>
+	    <property name="driverClassName" value="org.postgresql.Driver"/>
+	    <property name="url" value="jdbc:postgresql://localhost:5432/accesscontroldb"/>
+	    <property name="username" value="postgres"/>
+	    <property name="password" value=""/>
 	    <property name="initialSize" value="5"/>
 	</bean>		
 	
