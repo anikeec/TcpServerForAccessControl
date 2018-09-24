@@ -1,6 +1,6 @@
 use accesscontroldb;
 
-CREATE TABLE `user` (
+CREATE TABLE `system_user` (
 	`user_id` INT NOT NULL AUTO_INCREMENT,
 	`first_name` VARCHAR(255),
 	`second_name` VARCHAR(255),
@@ -91,7 +91,7 @@ CREATE TABLE `access_message_wrong` (
 	PRIMARY KEY (`access_mess_id`)
 );
 
-ALTER TABLE `card` ADD CONSTRAINT `card_fk0` FOREIGN KEY (`user_id`) REFERENCES `user`(`user_id`);
+ALTER TABLE `card` ADD CONSTRAINT `card_fk0` FOREIGN KEY (`user_id`) REFERENCES `system_user`(`user_id`);
 
 ALTER TABLE `access_message` ADD CONSTRAINT `access_message_fk0` FOREIGN KEY (`card_id`) REFERENCES `card`(`card_id`);
 
