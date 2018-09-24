@@ -20,7 +20,7 @@ public class AccessMessageInsertListener implements PostInsertEventListener {
     public void onPostInsert(PostInsertEvent event) {
         if(event.getEntity() instanceof AccessMessage) {
             AccessMessage insertedMessage = (AccessMessage)event.getEntity();
-            System.out.print(insertedMessage);
+//            System.out.print(insertedMessage);
         }
         
     }
