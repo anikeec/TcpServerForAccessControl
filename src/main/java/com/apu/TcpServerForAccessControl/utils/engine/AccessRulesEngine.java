@@ -28,7 +28,7 @@ import com.apu.TcpServerForAccessControlDB.repository.EventMessageRepository;
 import com.apu.TcpServerForAccessControlDB.repository.EventTypeRepository;
 import com.apu.TcpServerForAccessControlDB.repository.RuleRepository;
 import com.apu.TcpServerForAccessControlDB.repository.RuleTypeRepository;
-import com.apu.TcpServerForAccessControlDB.repository.UserRepository;
+import com.apu.TcpServerForAccessControlDB.repository.SystemUserRepository;
 import com.apu.TcpServerForAccessControlAPI.packet.AccessPacket;
 import com.apu.TcpServerForAccessControlAPI.packet.InfoPacket;
 
@@ -62,7 +62,7 @@ public class AccessRulesEngine {
     private RuleTypeRepository ruleTypeRepository;
     
     @Autowired
-    private UserRepository userRepository;
+    private SystemUserRepository userRepository;
   
     
     public RawPacket engine(RawPacket message) {
