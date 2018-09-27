@@ -20,7 +20,9 @@
 	<int-ip:tcp-connection-factory id="crLfServer"
 								   type="server"
 								   port="65530"
-								   using-nio="true"/>
+								   using-nio="true"
+								   deserializer="jsonDeserializer"
+								   serializer="jsonSerializer"/>
     
     <int-ip:tcp-outbound-channel-adapter id="outboundServer"
         channel="tcpOutputChannel"
@@ -35,6 +37,12 @@
      
     <int:channel id="toTcpClient"/>  
         
+    <bean id="jsonSerializer"
+      class="org.springframework.integration.ip.tcp.serializer.MapJsonSerializer" />
+    <bean id="jsonDeserializer"
+      class="org.springframework.integration.ip.tcp.serializer.MapJsonSerializer" />
+	
+		
 	
 	<int-ip:tcp-inbound-channel-adapter id="inboundServer"
 	    channel="tcpInputChannel"
