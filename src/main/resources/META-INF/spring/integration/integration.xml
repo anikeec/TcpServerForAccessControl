@@ -20,16 +20,8 @@
 	<int-ip:tcp-connection-factory id="crLfServer"
 								   type="server"
 								   port="65530"
-								   using-nio="true"					   
-								   />	
-								   <!-- mapper="jsonMapper" 
-								   deserializer="jsonDeserializer"
-                                   serializer="jsonSerializer"
-								   -->
-	
-<!-- 	<bean id="jsonObjectMapper" -->
-<!--           class="com.apu.TcpServerForAccessControl.CustomObjectMapper"/> -->
-								   
+								   using-nio="true"									   		   
+								   />								   
     
     <int-ip:tcp-outbound-channel-adapter id="outboundServer"
         channel="tcpOutputChannel"
@@ -43,19 +35,7 @@
     </int:chain>
      
     <int:channel id="toTcpClient"/>  
-        
-<!--     <bean id="jsonSerializer" -->
-<!--       class="org.springframework.integration.ip.tcp.serializer.MapJsonSerializer" /> -->
-<!--     <bean id="jsonDeserializer" -->
-<!--       class="org.springframework.integration.ip.tcp.serializer.MapJsonSerializer" /> -->
-<!--     <bean id="jsonMapper" -->
-<!--       class="org.springframework.integration.ip.tcp.connection.MessageConvertingTcpMessageMapper"> -->
-<!--       <constructor-arg name="messageConverter"> -->
-<!--         <bean class="com.apu.TcpServerForAccessControl.JsonMessageConverter"> -->
-<!--         </bean> -->
-<!--       </constructor-arg> -->
-<!--     </bean> -->	
-		
+
 	
 	<int-ip:tcp-inbound-channel-adapter id="inboundServer"
 	    channel="tcpInputChannel"
@@ -76,25 +56,10 @@
 <!--           class="com.apu.TcpServerForAccessControl.utils.message.MessageEcho"/> -->
     <!-- tempFinish -->
     
-    <int:json-to-object-transformer ref="jsonToObjectTransformer" input-channel="tcpInputChannel"
-                                    output-channel="tcpInputObjectChannel"                                   
-                                    />
-    
-<!--     <int:json-to-object-transformer input-channel="tcpInputChannel" -->
-<!--                                     output-channel="tcpInputObjectChannel"                                    -->
-<!--                                     /> -->
-                                    <!-- type="com.apu.TcpServerForAccessControlDB.entity.RuleType"
-                                    object-mapper="jsonObjectMapper"
-                                    
-                                     -->
-                                    
-<!--     <bean id="jsonObjectMapper" -->
-<!--           class="com.apu.TcpServerForAccessControl.CustomJsonObjectMapper"/> -->
-                                    
-    
-    <int:channel id="tcpInputObjectChannel" />
+    <bean id="jsonMessageConverter" class="com.apu.TcpServerForAccessControl.utils.message.JsonMessageConverter"/>                                    
 	
-	<int:chain input-channel="tcpInputObjectChannel" output-channel="toEngineChannel">
+	<int:chain input-channel="tcpInputChannel" output-channel="toEngineChannel">
+	   <int:transformer ref="jsonMessageConverter" method="toObject"/>
 	   <int:transformer ref="messageChecker" method="check"/>
 	   <int:transformer ref="messageDecoder" method="decode"/>
 	   <int:transformer ref="messageConverter" method="convert"/>

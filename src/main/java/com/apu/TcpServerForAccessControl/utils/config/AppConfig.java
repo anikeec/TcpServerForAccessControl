@@ -33,41 +33,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @ComponentScan({"com.apu.TcpServerForAccessControlDB","com.apu.TcpServerForAccessControl.utils"})
 @EnableRedisRepositories(basePackages= {"com.apu.TcpServerForAccessControlDB.repository"})
 public class AppConfig {
-    
-//    @Bean("jsonObjectMapper")
-    public JsonObjectMapper<JsonNode, JsonParser> jsonObjectMapper() {
-        ObjectMapper mapper = new ObjectMapper();
-//        mapper.registerModule(new JavaTimeModule());
-        mapper.registerSubtypes(RawPacket.class);
-        mapper.registerSubtypes(AccessPacket.class);
-        mapper.registerSubtypes(ServicePacket.class);
-        return new Jackson2JsonObjectMapper(mapper);
-    }
-    
-//    @Bean
-//    public ObjectMapper objectMapper() {
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        objectMapper.setSerializationInclusion(Include.NON_NULL);
-//        objectMapper.configure(MapperFeature.DEFAULT_VIEW_INCLUSION, false);
-//        objectMapper.registerSubtypes(RawPacket.class);
-//        objectMapper.registerSubtypes(AccessPacket.class);
-//        objectMapper.registerSubtypes(ServicePacket.class);
-//        return objectMapper;
-//    }
-    
-    @Bean("jsonToObjectTransformer")
-//    @Transformer(inputChannel="tcpInputChannel", outputChannel="tcpInputObjectChannel")
-    JsonToObjectTransformer jsonToObjectTransformer() {
-        return new JsonToObjectTransformer(jsonObjectMapper());
-    }
-    
-//    @Bean
-//    @Transformer(inputChannel="input", outputChannel="output")
-//    JsonToObjectTransformer jsonToObjectTransformer() {
-//        JsonObjectMapper<?, ?> mapper = JsonObjectMapperProvider.newInstance();
-//        mapper.populateJavaTypes(map, object);
-//        return new JsonToObjectTransformer(mapper);
-//    }
 
     @Bean
     JedisConnectionFactory jedisConnectionFactory() {
