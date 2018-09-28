@@ -19,7 +19,7 @@ import com.apu.TcpServerForAccessControl.utils.logging.LoggingOutputStream;
 //@EnableCaching
 //(scanBasePackages = {"com.apu.TcpServerForAccessControl.utils", "com.apu.TcpServerForAccessControlDB.entity"})
 //@EnableJpaRepositories(basePackageClasses=com.apu.TcpServerForAccessControlDB.repository.AccessMessageRepository.class)
-//@EnableAutoConfiguration
+@EnableAutoConfiguration
 @EnableJpaRepositories(basePackages= {"com.apu.TcpServerForAccessControlDB.repository"})
 @EntityScan(basePackages = {"com.apu.TcpServerForAccessControlDB.entity"})  
 @ImportResource("/META-INF/spring/integration/integration.xml")

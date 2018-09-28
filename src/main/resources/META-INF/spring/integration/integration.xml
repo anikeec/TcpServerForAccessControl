@@ -20,9 +20,16 @@
 	<int-ip:tcp-connection-factory id="crLfServer"
 								   type="server"
 								   port="65530"
-								   using-nio="true"
+								   using-nio="true"					   
+								   />	
+								   <!-- mapper="jsonMapper" 
 								   deserializer="jsonDeserializer"
-								   serializer="jsonSerializer"/>
+                                   serializer="jsonSerializer"
+								   -->
+	
+<!-- 	<bean id="jsonObjectMapper" -->
+<!--           class="com.apu.TcpServerForAccessControl.CustomObjectMapper"/> -->
+								   
     
     <int-ip:tcp-outbound-channel-adapter id="outboundServer"
         channel="tcpOutputChannel"
@@ -37,15 +44,22 @@
      
     <int:channel id="toTcpClient"/>  
         
-    <bean id="jsonSerializer"
-      class="org.springframework.integration.ip.tcp.serializer.MapJsonSerializer" />
-    <bean id="jsonDeserializer"
-      class="org.springframework.integration.ip.tcp.serializer.MapJsonSerializer" />
-	
+<!--     <bean id="jsonSerializer" -->
+<!--       class="org.springframework.integration.ip.tcp.serializer.MapJsonSerializer" /> -->
+<!--     <bean id="jsonDeserializer" -->
+<!--       class="org.springframework.integration.ip.tcp.serializer.MapJsonSerializer" /> -->
+<!--     <bean id="jsonMapper" -->
+<!--       class="org.springframework.integration.ip.tcp.connection.MessageConvertingTcpMessageMapper"> -->
+<!--       <constructor-arg name="messageConverter"> -->
+<!--         <bean class="com.apu.TcpServerForAccessControl.JsonMessageConverter"> -->
+<!--         </bean> -->
+<!--       </constructor-arg> -->
+<!--     </bean> -->	
 		
 	
 	<int-ip:tcp-inbound-channel-adapter id="inboundServer"
 	    channel="tcpInputChannel"
+	    error-channel="errorChannel"
 	    connection-factory="crLfServer"/>
 
 	<int:channel id="tcpInputChannel">
@@ -61,8 +75,26 @@
 <!--      <bean id="messageEcho" -->
 <!--           class="com.apu.TcpServerForAccessControl.utils.message.MessageEcho"/> -->
     <!-- tempFinish -->
+    
+    <int:json-to-object-transformer ref="jsonToObjectTransformer" input-channel="tcpInputChannel"
+                                    output-channel="tcpInputObjectChannel"                                   
+                                    />
+    
+<!--     <int:json-to-object-transformer input-channel="tcpInputChannel" -->
+<!--                                     output-channel="tcpInputObjectChannel"                                    -->
+<!--                                     /> -->
+                                    <!-- type="com.apu.TcpServerForAccessControlDB.entity.RuleType"
+                                    object-mapper="jsonObjectMapper"
+                                    
+                                     -->
+                                    
+<!--     <bean id="jsonObjectMapper" -->
+<!--           class="com.apu.TcpServerForAccessControl.CustomJsonObjectMapper"/> -->
+                                    
+    
+    <int:channel id="tcpInputObjectChannel" />
 	
-	<int:chain input-channel="tcpInputChannel" output-channel="toEngineChannel">
+	<int:chain input-channel="tcpInputObjectChannel" output-channel="toEngineChannel">
 	   <int:transformer ref="messageChecker" method="check"/>
 	   <int:transformer ref="messageDecoder" method="decode"/>
 	   <int:transformer ref="messageConverter" method="convert"/>
@@ -143,9 +175,14 @@
 
 	<int:channel id="errorChannel"/>
 
-	<int:transformer id="errorHandler"
-					 input-channel="errorChannel"
-					 expression="payload.failedMessage.payload + ':' + payload.cause.message"/>
+<!-- 	<int:transformer id="errorHandler" -->
+<!-- 					 input-channel="errorChannel" -->
+<!-- 					 expression="payload.failedMessage.payload + ':' + payload.cause.message"/> -->
+					 
+	<int:service-activator input-channel="errorChannel" ref="errorHandler" method="handle"/>
+					 
+    <bean id="errorHandler"
+         class="com.apu.TcpServerForAccessControl.utils.message.ErrorHandler"/>
 					 
 	<bean id="dataSource" destroy-method="close" class="org.apache.commons.dbcp2.BasicDataSource">
 	    <property name="driverClassName" value="org.postgresql.Driver"/>

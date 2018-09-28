@@ -1,5 +1,7 @@
 package com.apu.TcpServerForAccessControl.utils.message;
 
+import java.util.Map;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
@@ -19,9 +21,16 @@ public class MessageChecker {
         return message.getBytes();
     }
     
+    public byte[] check(Map<String, String> message) {
+        logger.info("Time: " + System.currentTimeMillis() + " ms.");
+        return new byte[10];
+    }
+    
     public byte[] check(Object message) {
         logger.info("Time: " + System.currentTimeMillis() + " ms.");
         return new byte[10];
     }
+    
+    
 
 }
