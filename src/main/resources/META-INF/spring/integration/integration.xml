@@ -56,10 +56,10 @@
 <!--           class="com.apu.TcpServerForAccessControl.utils.message.MessageEcho"/> -->
     <!-- tempFinish -->
     
-    <bean id="jsonMessageConverter" class="com.apu.TcpServerForAccessControl.utils.message.JsonMessageConverter"/>                                    
+    <bean id="jsonSerializer" 
+          class="com.apu.TcpServerForAccessControl.utils.converter.JsonSerializer"/>                                   
 	
 	<int:chain input-channel="tcpInputChannel" output-channel="toEngineChannel">
-	   <int:transformer ref="jsonMessageConverter" method="toObject"/>
 	   <int:transformer ref="messageChecker" method="check"/>
 	   <int:transformer ref="messageDecoder" method="decode"/>
 	   <int:transformer ref="messageConverter" method="convert"/>
@@ -153,7 +153,7 @@
 	    <property name="driverClassName" value="org.postgresql.Driver"/>
 	    <property name="url" value="jdbc:postgresql://localhost:5432/accesscontroldb"/>
 	    <property name="username" value="postgres"/>
-	    <property name="password" value=""/>
+	    <property name="password" value="postgres"/>
 	    <property name="initialSize" value="5"/>
 	</bean>		
 	

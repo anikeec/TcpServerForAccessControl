@@ -1,0 +1,58 @@
+package com.apu.TcpServerForAccessControl.utils.converter;
+
+import com.apu.TcpServerForAccessControlAPI.packet.AccessPacket;
+import com.apu.TcpServerForAccessControlAPI.packet.InfoPacket;
+import com.apu.TcpServerForAccessControlAPI.packet.MessageType;
+import com.apu.TcpServerForAccessControlAPI.packet.RawPacket;
+import com.apu.TcpServerForAccessControlAPI.packet.ServicePacket;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import org.springframework.stereotype.Component;
+
+@Component
+public class JsonSerializer {
+    
+    public RawPacket deserialize(String inputJson) {
+        GsonBuilder builder = new GsonBuilder();
+        builder.excludeFieldsWithoutExposeAnnotation();
+        Gson gson = builder.create();
+        JsonObject object = gson.fromJson(inputJson, JsonObject.class);
+        String messageType = null;
+        if(object.get("mt")  != null) {
+            messageType = object.get("mt").getAsString();
+        }
+        RawPacket packet = null;
+        if((messageType != null) && 
+           (messageType.equals(MessageType.ACCESS.toString()))) {
+            packet = gson.fromJson(inputJson, AccessPacket.class);
+        } else 
+        if((messageType != null) && 
+           (messageType.equals(MessageType.SERVICE.toString()))) {
+            packet = gson.fromJson(inputJson, ServicePacket.class);
+        } else 
+        if((messageType != null) && 
+           (messageType.equals(MessageType.INFO.toString()))) {
+            packet = gson.fromJson(inputJson, InfoPacket.class);
+        }
+        
+        return packet;
+    }
+    
+    public RawPacket deserializeBytes(byte[] inputBytes) {
+        return this.deserialize(new String(inputBytes));
+    }
+    
+    public String serialize(RawPacket inputPkt) {
+        GsonBuilder builder = new GsonBuilder();
+        builder.excludeFieldsWithoutExposeAnnotation();
+        Gson gson = builder.create();
+        String resultJson = gson.toJson(inputPkt);
+        return resultJson;
+    }
+    
+    public byte[] serializeBytes(RawPacket inputPkt) {
+        return this.serialize(inputPkt).getBytes();
+    }
+    
+}
