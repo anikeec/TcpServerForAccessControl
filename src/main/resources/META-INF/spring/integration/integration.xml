@@ -20,7 +20,8 @@
 	<int-ip:tcp-connection-factory id="crLfServer"
 								   type="server"
 								   port="65530"
-								   using-nio="true"									   		   
+								   using-nio="true"
+								   lookup-host="false"									   		   
 								   />								   
     
     <int-ip:tcp-outbound-channel-adapter id="outboundServer"
@@ -153,7 +154,7 @@
 	    <property name="driverClassName" value="org.postgresql.Driver"/>
 	    <property name="url" value="jdbc:postgresql://localhost:5432/accesscontroldb"/>
 	    <property name="username" value="postgres"/>
-	    <property name="password" value="postgres"/>
+	    <property name="password" value=""/>
 	    <property name="initialSize" value="5"/>
 	</bean>		
 	
