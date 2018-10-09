@@ -15,6 +15,7 @@ public class JsonSerializer {
     
     public RawPacket deserialize(String inputJson) {
         GsonBuilder builder = new GsonBuilder();
+        builder.setDateFormat("dd.MM.yy HH:mm:ss");
         builder.excludeFieldsWithoutExposeAnnotation();
         Gson gson = builder.create();
         JsonObject object = gson.fromJson(inputJson, JsonObject.class);
@@ -45,6 +46,7 @@ public class JsonSerializer {
     
     public String serialize(RawPacket inputPkt) {
         GsonBuilder builder = new GsonBuilder();
+        builder.setDateFormat("dd.MM.yy HH:mm:ss");
         builder.excludeFieldsWithoutExposeAnnotation();
         Gson gson = builder.create();
         String resultJson = gson.toJson(inputPkt);
