@@ -23,7 +23,9 @@
 	<int-ip:tcp-connection-factory id="crLfServer"
 								   type="server"
 								   port="65530"
-								   using-nio="true"/>
+								   using-nio="true"
+								   lookup-host="false"									   		   
+								   />								   
     
     <int-ip:tcp-outbound-channel-adapter id="outboundServer"
         channel="tcpOutputChannel"
@@ -37,10 +39,11 @@
     </int:chain>
      
     <int:channel id="toTcpClient"/>  
-        
+
 	
 	<int-ip:tcp-inbound-channel-adapter id="inboundServer"
 	    channel="tcpInputChannel"
+	    error-channel="errorChannel"
 	    connection-factory="crLfServer"/>
 
 	<int:channel id="tcpInputChannel">
@@ -56,6 +59,9 @@
 <!--      <bean id="messageEcho" -->
 <!--           class="com.apu.TcpServerForAccessControl.utils.message.MessageEcho"/> -->
     <!-- tempFinish -->
+    
+    <bean id="jsonSerializer" 
+          class="com.apu.TcpServerForAccessControl.utils.converter.JsonSerializer"/>                                   
 	
 	<int:chain input-channel="tcpInputChannel" output-channel="toEngineChannel">
 	   <int:transformer ref="messageChecker" method="check"/>
@@ -117,7 +123,7 @@
           class="com.apu.TcpServerForAccessControl.utils.engine.InfoRulesEngine"/>	
           
     <bean id="accessRulesEngine"
-          class="com.apu.TcpServerForAccessControl.utils.engine.AccessRulesEngineMongoDB"/>  
+          class="com.apu.TcpServerForAccessControl.utils.engine.AccessRulesEngine"/>  
          
           
     <int:channel id="toLogging"/>
@@ -138,17 +144,30 @@
 
 	<int:channel id="errorChannel"/>
 
-	<int:transformer id="errorHandler"
-					 input-channel="errorChannel"
-					 expression="payload.failedMessage.payload + ':' + payload.cause.message"/>
+<!-- 	<int:transformer id="errorHandler" -->
+<!-- 					 input-channel="errorChannel" -->
+<!-- 					 expression="payload.failedMessage.payload + ':' + payload.cause.message"/> -->
 					 
-	<bean id="dataSource" destroy-method="close" class="org.apache.commons.dbcp2.BasicDataSource">
-	    <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-	    <property name="url" value="jdbc:mysql://localhost:3306/accesscontroldb"/>
-	    <property name="username" value="app"/>
-	    <property name="password" value="qwerty"/>
-	    <property name="initialSize" value="5"/>
-	</bean>		
+	<int:service-activator input-channel="errorChannel" ref="errorHandler" method="handle"/>
+					 
+    <bean id="errorHandler"
+         class="com.apu.TcpServerForAccessControl.utils.message.ErrorHandler"/>
+					 
+<!-- 	<bean id="dataSource" destroy-method="close" class="org.apache.commons.dbcp2.BasicDataSource"> -->
+<!-- 	    <property name="driverClassName" value="org.postgresql.Driver"/> -->
+<!-- 	    <property name="url" value="jdbc:postgresql://localhost:5432/accesscontroldb"/> -->
+<!-- 	    <property name="username" value="postgres"/> -->
+<!-- 	    <property name="password" value=""/> -->
+<!-- 	    <property name="initialSize" value="5"/> -->
+<!-- 	</bean>	 -->
+	
+    <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+        <property name="driverClassName" value="org.postgresql.Driver" />
+        <property name="jdbcUrl" value="jdbc:postgresql://localhost:5432/accesscontroldb" />
+        <property name="username" value="postgres" />
+        <property name="password" value="" />
+    </bean>
+
 	
 <!--     <bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">  -->
 <!-- 	    <property name="caches">  -->
@@ -161,20 +180,5 @@
 <!-- 	        </set>  -->
 <!-- 	    </property>  -->
 <!-- 	</bean> -->
-
-
-    <bean id="mongoClient" class="com.mongodb.MongoClient">
-	    <constructor-arg name="host" value="localhost" />
-	    <constructor-arg name="port" value="27017" />
-	</bean>
-
-<!--     <mongo:mongo-client id="mongoClient" /> -->
-
-	  <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
-	    <constructor-arg ref="mongoClient" />
-	    <constructor-arg value="accesscontroldb" />
-	  </bean>
-	
-<!-- 	  <mongo:repositories base-package="com.apu.TcpServerForAccessControlMongoDB.repository" /> -->
 
 </beans>

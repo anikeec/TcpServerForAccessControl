@@ -1,5 +1,6 @@
 package com.apu.TcpServerForAccessControl.utils.message;
 
+import com.apu.TcpServerForAccessControl.utils.converter.JsonSerializer;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -16,18 +17,22 @@ import org.springframework.stereotype.Component;
 import com.apu.TcpServerForAccessControlAPI.packet.InfoPacket;
 import com.apu.TcpServerForAccessControlAPI.packet.RawPacket;
 import com.apu.TcpServerForAccessControlAPI.packet.ServicePacket;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Component
 public class MessageConverter {
     
     private static final Logger logger = LogManager.getLogger(MessageConverter.class);
     
+    @Autowired
+    JsonSerializer jsonSerializer;
+    
     public RawPacket convert(byte[] packet) {
         
         RawPacket pkt = new RawPacket();
         try {
-            pkt = deserialize(packet);
-        } catch(ClassNotFoundException | IOException e) {
+            pkt = jsonSerializer.deserializeBytes(packet);
+        } catch(Exception e) {
             logger.error(ExceptionUtils.getStackTrace(e));
         }
         
@@ -38,8 +43,8 @@ public class MessageConverter {
     public byte[] convertBack(RawPacket packet) {
         byte[] packetBytes = new byte[0];
         try {
-            packetBytes = serializePacket(packet);
-        } catch(IOException e) {
+            packetBytes = jsonSerializer.serializeBytes(packet);
+        } catch(Exception e) {
             logger.error(ExceptionUtils.getStackTrace(e));
         }
         
@@ -47,48 +52,48 @@ public class MessageConverter {
         return packetBytes;
     }
     
-    private RawPacket deserialize(byte[] srcPacketStr) throws ClassNotFoundException, IOException {
-        RawPacket resultPacket = null;
-        ByteArrayInputStream bis = new ByteArrayInputStream(srcPacketStr);
-        ObjectInput in = null;
-        try {
-          in = new ObjectInputStream(bis);
-          Object o = in.readObject(); 
-          if(o instanceof RawPacket) {
-              if(o instanceof ServicePacket) {
-                  resultPacket = (ServicePacket)o;
-              } else if(o instanceof InfoPacket) {
-                  resultPacket = (InfoPacket)o;
-              } else {
-                  resultPacket = (RawPacket)o;
-              }
-          }
-        } finally {
-                if (in != null) {
-                  in.close();
-                }
-                if(bis != null)
-                    bis.close();
-        }
-        return resultPacket;
-    }
-    
-    private static byte[] serializePacket(RawPacket srcPacket) throws IOException {   
-        byte[] resultBytes = null;
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        ObjectOutput out = null;
-        try {
-            out = new ObjectOutputStream(bos);   
-            out.writeObject(srcPacket);
-            out.flush();
-            resultBytes = bos.toByteArray();
-        } finally {
-            try {
-                bos.close();
-            } catch (IOException ex) {
-            }
-        }        
-        return resultBytes;
-    }
+//    private RawPacket deserialize(byte[] srcPacketStr) throws ClassNotFoundException, IOException {
+//        RawPacket resultPacket = null;
+//        ByteArrayInputStream bis = new ByteArrayInputStream(srcPacketStr);
+//        ObjectInput in = null;
+//        try {
+//          in = new ObjectInputStream(bis);
+//          Object o = in.readObject(); 
+//          if(o instanceof RawPacket) {
+//              if(o instanceof ServicePacket) {
+//                  resultPacket = (ServicePacket)o;
+//              } else if(o instanceof InfoPacket) {
+//                  resultPacket = (InfoPacket)o;
+//              } else {
+//                  resultPacket = (RawPacket)o;
+//              }
+//          }
+//        } finally {
+//                if (in != null) {
+//                  in.close();
+//                }
+//                if(bis != null)
+//                    bis.close();
+//        }
+//        return resultPacket;
+//    }
+//    
+//    private static byte[] serializePacket(RawPacket srcPacket) throws IOException {   
+//        byte[] resultBytes = null;
+//        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+//        ObjectOutput out = null;
+//        try {
+//            out = new ObjectOutputStream(bos);   
+//            out.writeObject(srcPacket);
+//            out.flush();
+//            resultBytes = bos.toByteArray();
+//        } finally {
+//            try {
+//                bos.close();
+//            } catch (IOException ex) {
+//            }
+//        }        
+//        return resultBytes;
+//    }
 
 }

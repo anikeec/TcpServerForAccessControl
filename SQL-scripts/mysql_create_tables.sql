@@ -1,25 +1,29 @@
 use accesscontroldb;
 
-CREATE TABLE `user` (
+CREATE TABLE `system_user` (
 	`user_id` INT NOT NULL AUTO_INCREMENT,
 	`first_name` VARCHAR(255),
 	`second_name` VARCHAR(255),
 	`phone_number` VARCHAR(255),
 	`email` VARCHAR(255),
+	`password` VARCHAR(255),
+	`active` BOOLEAN NOT NULL DEFAULT FALSE,
 	PRIMARY KEY (`user_id`)
 );
 
 CREATE TABLE `card` (
 	`card_id` INT NOT NULL AUTO_INCREMENT,
-	`card_number` VARCHAR(255),
-	`user_id` INT,
+	`card_number` VARCHAR(255) NOT NULL,
+	`user_id` INT NOT NULL,
+	`active` BOOLEAN NOT NULL DEFAULT FALSE,
 	PRIMARY KEY (`card_id`)
 );
 
 CREATE TABLE `device` (
 	`device_id` INT NOT NULL AUTO_INCREMENT,
-	`device_number` INT,
-	`last_packet_id` INT,
+	`device_number` INT NOT NULL,
+	`last_packet_id` INT  NOT NULL DEFAULT 0,
+	`active` BOOLEAN NOT NULL DEFAULT FALSE,
 	PRIMARY KEY (`device_id`)
 );
 
@@ -44,7 +48,7 @@ CREATE TABLE `info_message` (
 
 CREATE TABLE `event_type` (
 	`event_id` INT NOT NULL AUTO_INCREMENT,
-	`description` VARCHAR(255),
+	`description` VARCHAR(255) NOT NULL,
 	PRIMARY KEY (`event_id`)
 );
 
@@ -56,12 +60,13 @@ CREATE TABLE `rule` (
 	`rule_type_id` INT,
 	`date_begin` DATETIME,
 	`date_end` DATETIME,
+	`active` BOOLEAN DEFAULT FALSE,
 	PRIMARY KEY (`rule_id`)
 );
 
 CREATE TABLE `rule_type` (
 	`rule_type_id` INT NOT NULL AUTO_INCREMENT,
-	`description` VARCHAR(255),
+	`description` VARCHAR(255) NOT NULL,
 	PRIMARY KEY (`rule_type_id`)
 );
 
@@ -86,7 +91,7 @@ CREATE TABLE `access_message_wrong` (
 	PRIMARY KEY (`access_mess_id`)
 );
 
-ALTER TABLE `card` ADD CONSTRAINT `card_fk0` FOREIGN KEY (`user_id`) REFERENCES `user`(`user_id`);
+ALTER TABLE `card` ADD CONSTRAINT `card_fk0` FOREIGN KEY (`user_id`) REFERENCES `system_user`(`user_id`);
 
 ALTER TABLE `access_message` ADD CONSTRAINT `access_message_fk0` FOREIGN KEY (`card_id`) REFERENCES `card`(`card_id`);
 
