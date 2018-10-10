@@ -44,7 +44,7 @@ CREATE TABLE access_message (
 	device_id INT,
 	event_id INT,
 	description VARCHAR(255),
-	date DATE,
+	date TIMESTAMP,
 	PRIMARY KEY (access_mess_id)
 );
 
@@ -53,7 +53,7 @@ CREATE TABLE info_message (
 	device_id INT,
 	event_id INT,
 	description VARCHAR(255),
-	date DATE,
+	date TIMESTAMP,
 	PRIMARY KEY (info_mess_id)
 );
 
@@ -69,8 +69,8 @@ CREATE TABLE rule (
 	device_id INT,
 	event_id INT,
 	rule_type_id INT,
-	date_begin DATE,
-	date_end DATE,
+	date_begin TIMESTAMP,
+	date_end TIMESTAMP,
 	active BOOLEAN DEFAULT FALSE,
 	PRIMARY KEY (rule_id)
 );
@@ -86,7 +86,7 @@ CREATE TABLE event_message (
 	device_id INT,
 	event_id INT,
 	description VARCHAR(255),
-	date DATE,
+	date TIMESTAMP,
 	base_access_mess_id INT,
 	rule_id INT,
 	PRIMARY KEY (event_mess_id)
@@ -98,7 +98,7 @@ CREATE TABLE access_message_wrong (
 	device_number INT,
 	event_id INT,
 	description VARCHAR(255),
-	date DATE,
+	date TIMESTAMP,
 	PRIMARY KEY (access_mess_id)
 );
 
