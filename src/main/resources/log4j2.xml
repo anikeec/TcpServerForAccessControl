@@ -14,6 +14,7 @@
         <Property name="logfilename">app.log</Property>
         <Property name="debuglogfilename">appDebug.log</Property>
         <Property name="FlexyPoolLogFilename">flexypool.log</Property>
+        <Property name="HibernateLogFilename">hibernate.log</Property>
     </Properties>
 	<Appenders>
 		<Console name="Console" target="SYSTEM_OUT">
@@ -44,12 +45,25 @@
             <AppenderRef ref="FlexyPoolFile"/>
         </Async>
         
+        <!-- Logging for Hibernate -->
+        <File name="HibernateFile" fileName="${HibernateLogFilename}" immediateFlush="true">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} %m%n" />
+        </File>
+        <Async name="HibernateAsync" class="org.apache.log4j.RollingFileAppender">            
+            <AppenderRef ref="HibernateFile"/>
+        </Async>
+        
 	</Appenders>
 	<Loggers>
 	   <!-- Logging for Flexy-pool -->
 	   <logger name="com.vladmihalcea.flexypool.metric.dropwizard.DropwizardMetrics" level="ALL" additivity="false">
 	       <AppenderRef ref="FlexyPoolAsync"/>
 	   </logger>
+	   
+	   <!-- Logging for Hibernate -->
+       <logger name="org.hibernate" level="ALL" additivity="false">
+           <AppenderRef ref="HibernateAsync"/>
+       </logger>
 		    
         <Logger name="outLog" level="ALL" additivity="false">
             <AppenderRef ref="LOGDEBUG" />
