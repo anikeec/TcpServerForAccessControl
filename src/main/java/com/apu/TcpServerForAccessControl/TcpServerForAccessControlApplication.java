@@ -31,7 +31,7 @@ public class TcpServerForAccessControlApplication {
     private static final Logger logger = LogManager.getLogger(TcpServerForAccessControlApplication.class);
 
 	public static void main(String[] args) {
-	    System.setOut(new PrintStream(new LoggingOutputStream(LogManager.getLogger("outLog"), Level.ALL), true));
+	    System.setOut(new PrintStream(new LoggingOutputStream(LogManager.getLogger("sysoutLog"), Level.ALL), true));
 		SpringApplication.run(TcpServerForAccessControlApplication.class, args);
 	}
 }

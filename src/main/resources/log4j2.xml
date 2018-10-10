@@ -12,7 +12,7 @@
 <Configuration status="ALL">
     <Properties>
         <Property name="logfilename">app.log</Property>
-        <Property name="debuglogfilename">appDebug.log</Property>
+        <Property name="Sysoutlogfilename">sysout.log</Property>
         <Property name="FlexyPoolLogFilename">flexypool.log</Property>
         <Property name="HibernateLogFilename">hibernate.log</Property>
     </Properties>
@@ -22,20 +22,12 @@
 		</Console>
 		<File name="FileLogger" fileName="${logfilename}" immediateFlush="true">
 	        <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5p [%c] - %m%n" />
-	    </File>
-	    <File name="DebugFileLogger" fileName="${debuglogfilename}" immediateFlush="true">
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} %m%n" />
-        </File>
+	    </File> 
         
 	    <Async name="ASYNC">
 			<AppenderRef ref="Console"/>
 			<AppenderRef ref="FileLogger"/>
 	    </Async>
-	    
-	    <Async name="LOGDEBUG">
-            <AppenderRef ref="Console"/>
-            <AppenderRef ref="DebugFileLogger"/>
-        </Async>
         
         <!-- Logging for Flexy-pool -->
         <File name="FlexyPoolFile" fileName="${FlexyPoolLogFilename}" immediateFlush="true">
@@ -53,6 +45,15 @@
             <AppenderRef ref="HibernateFile"/>
         </Async>
         
+        <!-- Logging for System out -->
+        <File name="SysoutFileLogger" fileName="${Sysoutlogfilename}" immediateFlush="true">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} %m%n" />
+        </File>
+        <Async name="SysoutAsync">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="SysoutFileLogger"/>
+        </Async>
+        
 	</Appenders>
 	<Loggers>
 	   <!-- Logging for Flexy-pool -->
@@ -65,9 +66,10 @@
            <AppenderRef ref="HibernateAsync"/>
        </logger>
 		    
-        <Logger name="outLog" level="ALL" additivity="false">
-            <AppenderRef ref="LOGDEBUG" />
-        </Logger>        
+	   <!-- Logging for System out -->	    
+       <Logger name="sysoutLog" level="ALL" additivity="false">
+           <AppenderRef ref="SysoutAsync" />
+       </Logger>        
         
 <!-- 		<Logger name="org.springframework.integration" level="debug" additivity="false"> -->
 <!-- 	        <AppenderRef ref="ASYNC" /> -->
