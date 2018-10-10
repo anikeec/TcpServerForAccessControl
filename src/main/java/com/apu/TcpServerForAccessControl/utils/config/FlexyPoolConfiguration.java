@@ -7,7 +7,6 @@ import java.util.concurrent.TimeUnit;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 
@@ -29,10 +28,6 @@ import com.zaxxer.hikari.HikariDataSource;
 @org.springframework.context.annotation.Configuration
 
 public class FlexyPoolConfiguration {
-    
-//    @Autowired
-//    @Qualifier("hikariDataSource")
-//    private HikariDataSource hikariDataSource;
 
     @Value("flexyPoolApu")//${flexy.pool.uniqueId}
     private String uniqueId;
