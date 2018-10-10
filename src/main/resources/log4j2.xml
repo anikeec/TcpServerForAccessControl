@@ -13,6 +13,7 @@
     <Properties>
         <Property name="logfilename">app.log</Property>
         <Property name="debuglogfilename">appDebug.log</Property>
+        <Property name="FlexyPoolLogFilename">flexypool.log</Property>
     </Properties>
 	<Appenders>
 		<Console name="Console" target="SYSTEM_OUT">
@@ -24,19 +25,36 @@
 	    <File name="DebugFileLogger" fileName="${debuglogfilename}" immediateFlush="true">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} %m%n" />
         </File>
+        
 	    <Async name="ASYNC">
 			<AppenderRef ref="Console"/>
 			<AppenderRef ref="FileLogger"/>
 	    </Async>
+	    
 	    <Async name="LOGDEBUG">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="DebugFileLogger"/>
         </Async>
+        
+        <!-- Logging for Flexy-pool -->
+        <File name="FlexyPoolFile" fileName="${FlexyPoolLogFilename}" immediateFlush="true">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} %m%n" />
+        </File>
+        <Async name="FlexyPoolAsync" class="org.apache.log4j.RollingFileAppender">            
+            <AppenderRef ref="FlexyPoolFile"/>
+        </Async>
+        
 	</Appenders>
-	<Loggers>	    
+	<Loggers>
+	   <!-- Logging for Flexy-pool -->
+	   <logger name="com.vladmihalcea.flexypool.metric.dropwizard.DropwizardMetrics" level="ALL" additivity="false">
+	       <AppenderRef ref="FlexyPoolAsync"/>
+	   </logger>
+		    
         <Logger name="outLog" level="ALL" additivity="false">
             <AppenderRef ref="LOGDEBUG" />
-        </Logger>	    
+        </Logger>        
+        
 <!-- 		<Logger name="org.springframework.integration" level="debug" additivity="false"> -->
 <!-- 	        <AppenderRef ref="ASYNC" /> -->
 <!-- 	    </Logger>     -->

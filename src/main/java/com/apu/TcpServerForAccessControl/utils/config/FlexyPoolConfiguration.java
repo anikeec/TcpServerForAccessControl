@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,13 +27,12 @@ import com.vladmihalcea.flexypool.strategy.RetryConnectionAcquiringStrategy;
 import com.zaxxer.hikari.HikariDataSource;
 
 @org.springframework.context.annotation.Configuration
-
 public class FlexyPoolConfiguration {
 
+    final Level FLEXYPOOL = Level.forName("FLEXYPOOL", 550);
+    
     @Value("flexyPoolApu")//${flexy.pool.uniqueId}
     private String uniqueId;
-
-    
     
     public static class ConnectionAcquireTimeThresholdExceededEventListener
         extends EventListener<ConnectionAcquireTimeThresholdExceededEvent> {
