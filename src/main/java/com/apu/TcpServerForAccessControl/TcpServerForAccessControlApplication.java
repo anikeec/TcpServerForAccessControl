@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
@@ -22,7 +23,8 @@ import com.apu.TcpServerForAccessControl.utils.logging.LoggingOutputStream;
 //@EnableAutoConfiguration
 @EnableJpaRepositories(basePackages= {"com.apu.TcpServerForAccessControlDB.repository"})
 //@EnableMongoRepositories(basePackages= {"com.apu.TcpServerForAccessControlMongoDB.repository"})
-@EntityScan(basePackages = {"com.apu.TcpServerForAccessControlDB.entity"})  
+@EntityScan(basePackages = {"com.apu.TcpServerForAccessControlDB.entity"}) 
+@ComponentScan(basePackages= {"com.apu.TcpServerForAccessControl.utils.config"})
 @ImportResource("/META-INF/spring/integration/integration.xml")
 public class TcpServerForAccessControlApplication {
     
