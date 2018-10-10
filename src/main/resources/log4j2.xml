@@ -11,7 +11,7 @@
  -->
 <Configuration status="ALL">
     <Properties>
-        <Property name="logfilename">app.log</Property>
+        <Property name="MainLogfilename">app.log</Property>
         <Property name="Sysoutlogfilename">sysout.log</Property>
         <Property name="FlexyPoolLogFilename">flexypool.log</Property>
         <Property name="HibernateLogFilename">hibernate.log</Property>
@@ -21,15 +21,7 @@
 		<Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5p [%c] - %m%n" />
 		</Console>
-		<File name="FileLogger" fileName="${logfilename}" immediateFlush="true">
-	        <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5p [%c] - %m%n" />
-	    </File> 
-        
-	    <Async name="ASYNC">
-			<AppenderRef ref="Console"/>
-			<AppenderRef ref="FileLogger"/>
-	    </Async>
-        
+
         <!-- Logging for Flexy-pool -->
         <File name="FlexyPoolFile" fileName="${FlexyPoolLogFilename}" immediateFlush="true">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} %m%n" />
@@ -63,6 +55,15 @@
             <AppenderRef ref="SpringIntegrationLogger"/>
         </Async>
         
+        <!-- Logging for other application information -->
+        <File name="MainLogger" fileName="${MainLogfilename}" immediateFlush="true">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5p [%c] - %m%n" />
+        </File>
+        <Async name="MainLogAsync">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="MainLogger"/>
+        </Async>
+        
 	</Appenders>
 	<Loggers>
 	   <!-- Logging for Flexy-pool -->
@@ -84,12 +85,10 @@
        <Logger name="org.springframework.integration" level="ALL" additivity="false">
            <AppenderRef ref="SpringIntegrationAsync" />
        </Logger>        
-        
-<!--         <Logger name="org.springframework" level="debug" additivity="false"> -->
-<!--             <AppenderRef ref="ASYNC" /> -->
-<!--         </Logger> -->
-        <Root level="all">
-            <AppenderRef ref="ASYNC" />
-        </Root>
+
+       <!-- Logging for other application information -->
+       <Root level="all">
+           <AppenderRef ref="MainLogAsync" />
+       </Root>
 	</Loggers>
 </Configuration>
