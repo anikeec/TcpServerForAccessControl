@@ -20,15 +20,15 @@ import com.apu.TcpServerForAccessControlDB.entity.EventMessage;
 import com.apu.TcpServerForAccessControlDB.entity.EventType;
 import com.apu.TcpServerForAccessControlDB.entity.Rule;
 import com.apu.TcpServerForAccessControlDB.entity.RuleType;
-import com.apu.TcpServerForAccessControlDB.repository.AccessMessageRepository;
-import com.apu.TcpServerForAccessControlDB.repository.AccessMessageWrongRepository;
-import com.apu.TcpServerForAccessControlDB.repository.CardRepository;
-import com.apu.TcpServerForAccessControlDB.repository.DeviceRepository;
-import com.apu.TcpServerForAccessControlDB.repository.EventMessageRepository;
-import com.apu.TcpServerForAccessControlDB.repository.EventTypeRepository;
-import com.apu.TcpServerForAccessControlDB.repository.RuleRepository;
-import com.apu.TcpServerForAccessControlDB.repository.RuleTypeRepository;
-import com.apu.TcpServerForAccessControlDB.repository.SystemUserRepository;
+import com.apu.TcpServerForAccessControl.service.AccessMessageService;
+import com.apu.TcpServerForAccessControl.service.AccessMessageWrongService;
+import com.apu.TcpServerForAccessControl.service.CardService;
+import com.apu.TcpServerForAccessControl.service.DeviceService;
+import com.apu.TcpServerForAccessControl.service.EventMessageService;
+import com.apu.TcpServerForAccessControl.service.EventTypeService;
+import com.apu.TcpServerForAccessControl.service.RuleService;
+import com.apu.TcpServerForAccessControl.service.RuleTypeService;
+import com.apu.TcpServerForAccessControl.service.UserService;
 import com.apu.TcpServerForAccessControlAPI.packet.AccessPacket;
 import com.apu.TcpServerForAccessControlAPI.packet.InfoPacket;
 
@@ -38,31 +38,31 @@ public class AccessRulesEngine {
     private static final Logger logger = LogManager.getLogger(AccessRulesEngine.class);
     
     @Autowired
-    private AccessMessageRepository accessMessageRepository;
+    private AccessMessageService accessMessageService;
     
     @Autowired
-    private AccessMessageWrongRepository accessMessageWrongRepository;
+    private AccessMessageWrongService accessMessageWrongService;
     
     @Autowired
-    private CardRepository cardRepository;
+    private CardService cardService;
     
     @Autowired
-    private DeviceRepository deviceRepository;
+    private DeviceService deviceService;
     
     @Autowired
-    private EventMessageRepository eventMessageRepository;
+    private EventMessageService eventMessageService;
     
     @Autowired
-    private EventTypeRepository eventTypeRepository;
+    private EventTypeService eventTypeService;
     
     @Autowired
-    private RuleRepository ruleRepository;
+    private RuleService ruleService;
     
     @Autowired
-    private RuleTypeRepository ruleTypeRepository;
+    private RuleTypeService ruleTypeService;
     
     @Autowired
-    private SystemUserRepository userRepository;
+    private UserService userService;
   
     
     public RawPacket engine(RawPacket message) {
@@ -153,7 +153,7 @@ public class AccessRulesEngine {
         if(retPacket != null) {
             AccessMessageWrong accessMessWrong = 
                     new AccessMessageWrong(cardNumber, deviceNumber, eventId, dateTime, "wrong packet");
-            accessMessageWrongRepository.save(accessMessWrong);
+            accessMessageWrongService.save(accessMessWrong);
         }
         
         long timeBeforeGetDeviceFromDB = System.nanoTime();
@@ -162,14 +162,14 @@ public class AccessRulesEngine {
         Device device = null;
         Integer lastPacketIdStored = null;
         if(retPacket == null) {
-            List<Device> deviceList = deviceRepository.findByDeviceNumber(deviceNumber);
+            List<Device> deviceList = deviceService.findByDeviceNumber(deviceNumber);
             if(deviceList.size() != 0) {
                 device = deviceList.get(0);//maybe I have to check to have only one deviceId with this deviceNumber    
                 lastPacketIdStored = device.getLastPacketId();
             } else {
                 AccessMessageWrong accessMessWrong = 
                         new AccessMessageWrong(cardNumber, deviceNumber, eventId, dateTime, "wrong deviceNumber");
-                accessMessageWrongRepository.save(accessMessWrong);
+                accessMessageWrongService.save(accessMessWrong);
                 retPacket = new InfoPacket(deviceNumber, packetNumber, "Received deviceNumber is wrong");
             }
         }
@@ -198,13 +198,13 @@ public class AccessRulesEngine {
         //get cardId from DB
         Card card = null;
         if(retPacket == null) {
-            List<Card> cardList = cardRepository.findByCardNumber(cardNumber);
+            List<Card> cardList = cardService.findByCardNumber(cardNumber);
             if(cardList.size() != 0) {
                 card = cardList.get(0);//maybe I have to check to have only one cardId with this cardNumber            
             } else {
                 AccessMessageWrong accessMessWrong = 
                         new AccessMessageWrong(cardNumber, deviceNumber, eventId, dateTime, "wrong cardNumber");
-                accessMessageWrongRepository.save(accessMessWrong);
+                accessMessageWrongService.save(accessMessWrong);
                 retPacket = new InfoPacket(deviceNumber, packetNumber, "Received cardNumber is wrong");
             }      
         }
@@ -214,11 +214,11 @@ public class AccessRulesEngine {
         //get eventType
         EventType eventType = null;
         if(retPacket == null) {
-            List<EventType> eventTypeList = eventTypeRepository.findByEventId(eventId);
+            List<EventType> eventTypeList = eventTypeService.findByEventId(eventId);
             if(eventTypeList.size() == 0) {
                 AccessMessageWrong accessMessWrong = 
                         new AccessMessageWrong(cardNumber, deviceNumber, eventId, dateTime, "wrong eventId for this cardNumber");
-                accessMessageWrongRepository.save(accessMessWrong);
+                accessMessageWrongService.save(accessMessWrong);
                 retPacket = new InfoPacket(deviceNumber, packetNumber, "Access denied for this cardNumber on this device. Wrong eventId.");
             } else {
                 eventType = eventTypeList.get(0);   //maybe its wrong
@@ -230,11 +230,11 @@ public class AccessRulesEngine {
         //find in DB rules for combination deviceId+cardId - maybe it will be good to add eventId
         List<Rule> ruleList = null;
         if(retPacket == null) {
-            ruleList = ruleRepository.findByDeviceIdAndCardId(device, card);
+            ruleList = ruleService.findByDeviceIdAndCardId(device, card);
             if(ruleList.size() == 0) {
                 AccessMessageWrong accessMessWrong = 
                         new AccessMessageWrong(cardNumber, deviceNumber, eventId, dateTime, "wrong rule for this cardNumber");
-                accessMessageWrongRepository.save(accessMessWrong);
+                accessMessageWrongService.save(accessMessWrong);
                 retPacket = new InfoPacket(deviceNumber, packetNumber, "Access denied for this cardNumber on this device");
             }
         }
@@ -252,7 +252,7 @@ public class AccessRulesEngine {
             if(trueRuleList.size() == 0) {
                 AccessMessageWrong accessMessWrong = 
                         new AccessMessageWrong(cardNumber, deviceNumber, eventId, dateTime, "wrong rule for this cardNumber");
-                accessMessageWrongRepository.save(accessMessWrong);
+                accessMessageWrongService.save(accessMessWrong);
                 retPacket = new InfoPacket(deviceNumber, packetNumber, "Access denied for this cardNumber on this device");
             }
         }       
@@ -269,7 +269,7 @@ public class AccessRulesEngine {
                     if((dateTime.getTime() >= dateBegin.getTime()) && 
                        (dateTime.getTime() <= dateEnd.getTime())) {
                       //access allow
-                        List<EventType> eventTypeListTemp = eventTypeRepository.findByDescription(
+                        List<EventType> eventTypeListTemp = eventTypeService.findByDescription(
                                 com.apu.TcpServerForAccessControlAPI.packet.EventType.ACCESS_ALLOW.toString());
                         
                         AccessPacket accessPacket = new AccessPacket();                    
@@ -282,16 +282,16 @@ public class AccessRulesEngine {
                         //write to access_message
                         AccessMessage accessMess = 
                                 new AccessMessage(device, card, eventType, dateTime, "Access OK");
-                        accessMessageRepository.save(accessMess);
+                        accessMessageService.save(accessMess);
                         
                         //write to event_message
                         EventMessage eventMessage = 
                                 new EventMessage(device, eventTypeListTemp.get(0), accessMess, rule, new Date(), "Access allow");                  
-                        eventMessageRepository.save(eventMessage);
+                        eventMessageService.save(eventMessage);
                     }
                 } else {
                     //access allow
-                    List<EventType> eventTypeListTemp = eventTypeRepository.findByDescription(
+                    List<EventType> eventTypeListTemp = eventTypeService.findByDescription(
                             com.apu.TcpServerForAccessControlAPI.packet.EventType.ACCESS_ALLOW.toString());
                     
                     AccessPacket accessPacket = new AccessPacket();                    
@@ -304,12 +304,12 @@ public class AccessRulesEngine {
                     //write to access_message
                     AccessMessage accessMess = 
                             new AccessMessage(device, card, eventType, dateTime, "Access OK");
-                    accessMessageRepository.save(accessMess);
+                    accessMessageService.save(accessMess);
                     
                     //write to event_message
                     EventMessage eventMessage = 
                             new EventMessage(device, eventTypeListTemp.get(0), accessMess, rule, new Date(), "Access allow");                  
-                    eventMessageRepository.save(eventMessage);
+                    eventMessageService.save(eventMessage);
                 }
             }
             
@@ -322,7 +322,7 @@ public class AccessRulesEngine {
             } else {
                 AccessMessageWrong accessMessWrong = 
                         new AccessMessageWrong(cardNumber, deviceNumber, eventId, dateTime, "wrong rule for this cardNumber");
-                accessMessageWrongRepository.save(accessMessWrong);
+                accessMessageWrongService.save(accessMessWrong);
                 retPacket = new InfoPacket(deviceNumber, packetNumber, "Access denied for this cardNumber on this device");
             }
         }
