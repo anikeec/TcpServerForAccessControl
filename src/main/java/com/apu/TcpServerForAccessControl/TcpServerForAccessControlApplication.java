@@ -24,7 +24,7 @@ import com.apu.TcpServerForAccessControl.logging.LoggingOutputStream;
 @EnableJpaRepositories(basePackages= {"com.apu.TcpServerForAccessControlDB.repository"})
 //@EnableMongoRepositories(basePackages= {"com.apu.TcpServerForAccessControlMongoDB.repository"})
 @EntityScan(basePackages = {"com.apu.TcpServerForAccessControlDB.entity"}) 
-@ComponentScan(basePackages= {"com.apu.TcpServerForAccessControl.utils.config"})
+@ComponentScan(basePackages= {"com.apu.TcpServerForAccessControl"})
 @ImportResource("/META-INF/spring/integration/integration.xml")
 public class TcpServerForAccessControlApplication {
     

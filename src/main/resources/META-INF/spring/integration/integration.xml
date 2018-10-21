@@ -57,11 +57,11 @@
 <!--        <int:transformer ref="messageEcho" method="echo"/> -->
 <!--      </int:chain> -->
 <!--      <bean id="messageEcho" -->
-<!--           class="com.apu.TcpServerForAccessControl.utils.message.MessageEcho"/> -->
+<!--           class="com.apu.TcpServerForAccessControl.message.MessageEcho"/> -->
     <!-- tempFinish -->
     
     <bean id="jsonSerializer" 
-          class="com.apu.TcpServerForAccessControl.utils.converter.JsonSerializer"/>                                   
+          class="com.apu.TcpServerForAccessControl.converter.JsonSerializer"/>                                   
 	
 	<int:chain input-channel="tcpInputChannel" output-channel="toEngineChannel">
 	   <int:transformer ref="messageChecker" method="check"/>
@@ -72,13 +72,13 @@
 	 <int:channel id="toEngineChannel"/>
 	
 	<bean id="messageChecker"
-          class="com.apu.TcpServerForAccessControl.utils.message.MessageChecker"/>
+          class="com.apu.TcpServerForAccessControl.message.MessageChecker"/>
 	
 	<bean id="messageDecoder"
-          class="com.apu.TcpServerForAccessControl.utils.message.MessageDecoder"/>
+          class="com.apu.TcpServerForAccessControl.message.MessageDecoder"/>
           
     <bean id="messageConverter"
-          class="com.apu.TcpServerForAccessControl.utils.message.MessageConverter"/>
+          class="com.apu.TcpServerForAccessControl.message.MessageConverter"/>
 	
 	
 <!-- 	<int:publish-subscribe-channel id="toEngineChannel" apply-sequence="true"/> -->
@@ -117,13 +117,13 @@
                            order="1"/>
 	
 	<bean id="serviceRulesEngine"
-          class="com.apu.TcpServerForAccessControl.utils.engine.ServiceRulesEngine"/>
+          class="com.apu.TcpServerForAccessControl.engine.ServiceRulesEngine"/>
 	
 	<bean id="infoRulesEngine"
-          class="com.apu.TcpServerForAccessControl.utils.engine.InfoRulesEngine"/>	
+          class="com.apu.TcpServerForAccessControl.engine.InfoRulesEngine"/>	
           
     <bean id="accessRulesEngine"
-          class="com.apu.TcpServerForAccessControl.utils.engine.AccessRulesEngine"/>  
+          class="com.apu.TcpServerForAccessControl.engine.AccessRulesEngine"/>  
          
           
     <int:channel id="toLogging"/>
@@ -133,7 +133,7 @@
                            method="writeToLog"/>
                            
     <bean id="logWriter"
-          class="com.apu.TcpServerForAccessControl.utils.logging.LogWriter"/>
+          class="com.apu.TcpServerForAccessControl.logging.LogWriter"/>
 
 <!-- 	<int:service-activator input-channel="toLogging" -->
 <!-- 						   ref="echoService" -->
@@ -151,7 +151,7 @@
 	<int:service-activator input-channel="errorChannel" ref="errorHandler" method="handle"/>
 					 
     <bean id="errorHandler"
-         class="com.apu.TcpServerForAccessControl.utils.message.ErrorHandler"/>
+         class="com.apu.TcpServerForAccessControl.message.ErrorHandler"/>
 					 
 <!-- 	<bean id="dataSource" destroy-method="close" class="org.apache.commons.dbcp2.BasicDataSource"> -->
 <!-- 	    <property name="driverClassName" value="org.postgresql.Driver"/> -->
