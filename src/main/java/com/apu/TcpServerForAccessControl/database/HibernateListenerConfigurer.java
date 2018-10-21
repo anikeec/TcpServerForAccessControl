@@ -1,4 +1,4 @@
-package com.apu.TcpServerForAccessControl.utils.database;
+package com.apu.TcpServerForAccessControl.database;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManagerFactory;

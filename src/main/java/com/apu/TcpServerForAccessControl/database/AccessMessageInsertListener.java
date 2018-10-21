@@ -1,4 +1,4 @@
-package com.apu.TcpServerForAccessControl.utils.database;
+package com.apu.TcpServerForAccessControl.database;
 
 import org.hibernate.event.spi.PostInsertEvent;
 import org.hibernate.event.spi.PostInsertEventListener;

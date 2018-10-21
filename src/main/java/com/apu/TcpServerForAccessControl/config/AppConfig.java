@@ -1,4 +1,4 @@
-package com.apu.TcpServerForAccessControl.utils.config;
+package com.apu.TcpServerForAccessControl.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -16,9 +16,9 @@ import org.springframework.integration.support.json.Jackson2JsonObjectMapper;
 import org.springframework.integration.support.json.JsonObjectMapper;
 import org.springframework.integration.support.json.JsonObjectMapperProvider;
 
-import com.apu.TcpServerForAccessControl.utils.redis.MessagePublisher;
-import com.apu.TcpServerForAccessControl.utils.redis.RedisMessagePublisher;
-import com.apu.TcpServerForAccessControl.utils.redis.RedisMessageSubscriber;
+import com.apu.TcpServerForAccessControl.redis.MessagePublisher;
+import com.apu.TcpServerForAccessControl.redis.RedisMessagePublisher;
+import com.apu.TcpServerForAccessControl.redis.RedisMessageSubscriber;
 import com.apu.TcpServerForAccessControlAPI.packet.AccessPacket;
 import com.apu.TcpServerForAccessControlAPI.packet.RawPacket;
 import com.apu.TcpServerForAccessControlAPI.packet.ServicePacket;

@@ -1,6 +1,5 @@
-package com.apu.TcpServerForAccessControl.utils.message;
+package com.apu.TcpServerForAccessControl.message;
 
-import com.apu.TcpServerForAccessControl.utils.converter.JsonSerializer;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -14,6 +13,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 
+import com.apu.TcpServerForAccessControl.converter.JsonSerializer;
 import com.apu.TcpServerForAccessControlAPI.packet.InfoPacket;
 import com.apu.TcpServerForAccessControlAPI.packet.RawPacket;
 import com.apu.TcpServerForAccessControlAPI.packet.ServicePacket;

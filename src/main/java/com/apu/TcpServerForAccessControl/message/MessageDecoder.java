@@ -1,4 +1,4 @@
-package com.apu.TcpServerForAccessControl.utils.message;
+package com.apu.TcpServerForAccessControl.message;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

@@ -1,4 +1,4 @@
-package com.apu.TcpServerForAccessControl.utils.logging;
+package com.apu.TcpServerForAccessControl.logging;
 
 import java.io.IOException;
 import java.io.OutputStream;

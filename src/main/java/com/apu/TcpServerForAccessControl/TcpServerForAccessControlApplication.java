@@ -14,7 +14,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-import com.apu.TcpServerForAccessControl.utils.logging.LoggingOutputStream;
+import com.apu.TcpServerForAccessControl.logging.LoggingOutputStream;
 
 @SpringBootApplication
 //@EnableCaching

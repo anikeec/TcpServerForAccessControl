@@ -1,4 +1,4 @@
-package com.apu.TcpServerForAccessControl.utils.message;
+package com.apu.TcpServerForAccessControl.message;
 
 import java.util.Map;
 

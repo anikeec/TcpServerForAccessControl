@@ -1,4 +1,4 @@
-package com.apu.TcpServerForAccessControl.utils.redis;
+package com.apu.TcpServerForAccessControl.redis;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;

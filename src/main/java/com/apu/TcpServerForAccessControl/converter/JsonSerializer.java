@@ -1,4 +1,4 @@
-package com.apu.TcpServerForAccessControl.utils.converter;
+package com.apu.TcpServerForAccessControl.converter;
 
 import com.apu.TcpServerForAccessControlAPI.packet.AccessPacket;
 import com.apu.TcpServerForAccessControlAPI.packet.InfoPacket;

@@ -1,4 +1,4 @@
-package com.apu.TcpServerForAccessControl.utils.redis;
+package com.apu.TcpServerForAccessControl.redis;
 
 public interface MessagePublisher {
 

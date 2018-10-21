@@ -1,4 +1,4 @@
-package com.apu.TcpServerForAccessControl.utils.logging;
+package com.apu.TcpServerForAccessControl.logging;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

@@ -1,4 +1,4 @@
-package com.apu.TcpServerForAccessControl.utils.config;
+package com.apu.TcpServerForAccessControl.config;
 
 import java.util.Arrays;
 import java.util.List;
