@@ -10,6 +10,21 @@ DROP TABLE event_type;
 DROP TABLE card;
 DROP TABLE device;
 DROP TABLE system_user;
+DROP TABLE user_role;
+DROP TABLE userrole_user;
+
+CREATE TABLE user_role (
+	user_role_id serial NOT NULL,
+	description VARCHAR(255),
+	PRIMARY KEY (user_role_id)
+);
+
+CREATE TABLE userrole_user (
+	uru_id serial NOT NULL,
+	user_role_id INT,
+	user_id INT,
+	PRIMARY KEY (uru_id)
+);
 
 CREATE TABLE system_user(
 	user_id serial NOT NULL,
@@ -101,6 +116,10 @@ CREATE TABLE access_message_wrong (
 	date TIMESTAMP,
 	PRIMARY KEY (access_mess_id)
 );
+
+ALTER TABLE userrole_user ADD CONSTRAINT userrole_user_fk0 FOREIGN KEY (user_role_id) REFERENCES user_role(user_role_id);
+
+ALTER TABLE userrole_user ADD CONSTRAINT userrole_user_fk1 FOREIGN KEY (user_id) REFERENCES system_user(user_id);
 
 ALTER TABLE card ADD CONSTRAINT card_fk0 FOREIGN KEY (user_id) REFERENCES system_user(user_id);
 

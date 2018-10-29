@@ -1,5 +1,18 @@
 use accesscontroldb;
 
+CREATE TABLE `user_role` (
+	`user_role_id` INT NOT NULL AUTO_INCREMENT,
+	`description` VARCHAR(255) NOT NULL,
+	PRIMARY KEY (`user_role_id`)
+);
+
+CREATE TABLE `userrole_user` (
+	`uru_id` INT NOT NULL AUTO_INCREMENT,
+	`user_role_id` INT,
+	`user_id` INT,
+	PRIMARY KEY (`uru_id`)
+);
+
 CREATE TABLE `system_user` (
 	`user_id` INT NOT NULL AUTO_INCREMENT,
 	`first_name` VARCHAR(255),
@@ -90,6 +103,10 @@ CREATE TABLE `access_message_wrong` (
 	`date` DATETIME,
 	PRIMARY KEY (`access_mess_id`)
 );
+
+ALTER TABLE `userrole_user` ADD CONSTRAINT `userrole_user_fk0` FOREIGN KEY (`user_role_id`) REFERENCES `user_role`(`user_role_id`);
+
+ALTER TABLE `userrole_user` ADD CONSTRAINT `userrole_user_fk1` FOREIGN KEY (`user_id`) REFERENCES `system_user`(`user_id`);
 
 ALTER TABLE `card` ADD CONSTRAINT `card_fk0` FOREIGN KEY (`user_id`) REFERENCES `system_user`(`user_id`);
 
