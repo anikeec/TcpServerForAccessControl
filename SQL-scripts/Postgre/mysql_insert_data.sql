@@ -5,8 +5,8 @@ INSERT INTO user_role(user_role_id, description) VALUES(2, 'ROLE_USER');
 
 INSERT INTO system_user(user_id, first_name, second_name, phone_number, email) VALUES(1, 'Peter', 'Petrov', '0501234567', 'petrov@gmail.com');
 
-INSERT INTO userrole_user(uru_id, user_role_id, user_id) VALUES(1, 1, 1);
-INSERT INTO userrole_user(uru_id, user_role_id, user_id) VALUES(2, 2, 1);
+INSERT INTO userrole_user(user_role_id, user_id) VALUES(1, 1);
+INSERT INTO userrole_user(user_role_id, user_id) VALUES(2, 1);
 
 INSERT INTO card(card_id, card_number, user_id) VALUES(1, '11111111', 1);
 
