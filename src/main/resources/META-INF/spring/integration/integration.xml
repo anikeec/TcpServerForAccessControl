@@ -16,7 +16,7 @@
 
 	<context:property-placeholder/>
 	
-	<cache:annotation-driven />
+<!-- 	<cache:annotation-driven /> -->
                                  
 	<!-- Server side -->
 
@@ -161,12 +161,12 @@
 <!-- 	    <property name="initialSize" value="5"/> -->
 <!-- 	</bean>	 -->
 	
-<!--     <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close"> -->
-<!--         <property name="driverClassName" value="org.postgresql.Driver" /> -->
-<!--         <property name="jdbcUrl" value="jdbc:postgresql://localhost:5432/accesscontroldb" /> -->
-<!--         <property name="username" value="postgres" /> -->
-<!--         <property name="password" value="" /> -->
-<!--     </bean> -->
+    <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+        <property name="driverClassName" value="org.postgresql.Driver" />
+        <property name="jdbcUrl" value="jdbc:postgresql://localhost:5432/accesscontroldb" />
+        <property name="username" value="postgres" />
+        <property name="password" value="" />
+    </bean>
 
 	
 <!--     <bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">  -->
