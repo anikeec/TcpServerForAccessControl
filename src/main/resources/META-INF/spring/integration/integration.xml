@@ -165,7 +165,8 @@
         <property name="driverClassName" value="org.postgresql.Driver" />
         <property name="jdbcUrl" value="jdbc:postgresql://localhost:5432/accesscontroldb" />
         <property name="username" value="postgres" />
-        <property name="password" value="" />
+        <property name="password" value="123456" />
+        <property name="maximumPoolSize" value="2" />
     </bean>
 
 	
