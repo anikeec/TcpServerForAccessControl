@@ -163,7 +163,7 @@
 	
     <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
         <property name="driverClassName" value="org.postgresql.Driver" />
-        <property name="jdbcUrl" value="jdbc:postgresql://localhost:5432/accesscontroldb" />
+        <property name="jdbcUrl" value="jdbc:postgresql://192.168.0.11:5432/accesscontroldb" />
         <property name="username" value="postgres" />
         <property name="password" value="123456" />
         <property name="maximumPoolSize" value="2" />
