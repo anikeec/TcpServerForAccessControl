@@ -3,6 +3,8 @@ package com.apu.TcpServerForAccessControl.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 //import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 //import org.springframework.data.redis.core.RedisTemplate;
 //import org.springframework.data.redis.listener.ChannelTopic;
@@ -30,6 +32,10 @@ import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Configuration
+@PropertySources({
+    @PropertySource("classpath:security.properties"),
+    @PropertySource("classpath:application.properties")
+})
 @ComponentScan({"com.apu.TcpServerForAccessControlDB","com.apu.TcpServerForAccessControl.utils"})
 //@EnableRedisRepositories(basePackages= {"com.apu.TcpServerForAccessControlDB.repository"})
 public class AppConfig {
