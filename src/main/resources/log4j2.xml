@@ -82,7 +82,7 @@
        </Logger>
        
        <!-- Logging for Spring Integration -->      
-       <Logger name="org.springframework.integration" level="ALL" additivity="false">
+       <Logger name="org.springframework.integration" level="ALL" additivity="true">
            <AppenderRef ref="SpringIntegrationAsync" />
        </Logger>        
 
