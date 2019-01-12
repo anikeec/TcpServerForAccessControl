@@ -3,7 +3,6 @@
 	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	   xmlns:int="http://www.springframework.org/schema/integration"
 	   xmlns:int-ip="http://www.springframework.org/schema/integration/ip"
-       xmlns:int-http="http://www.springframework.org/schema/integration/http"
 	   xmlns:context="http://www.springframework.org/schema/context"
 	   xmlns:cache="http://www.springframework.org/schema/cache"
 	   xmlns:mongo="http://www.springframework.org/schema/data/mongo"
@@ -11,8 +10,6 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
 		http://www.springframework.org/schema/integration/ip http://www.springframework.org/schema/integration/ip/spring-integration-ip.xsd
-		http://www.springframework.org/schema/integration/http
-        http://www.springframework.org/schema/integration/http/spring-integration-http.xsd
 		http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd
 		http://www.springframework.org/schema/data/mongo
         http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd">
@@ -21,40 +18,8 @@
 	
 <!-- 	<cache:annotation-driven /> -->
     <int:logging-channel-adapter id="logging" log-full-message="true" level="TRACE"/>
-
-    <!-- Server side http  -->
-<!-- 
-	<int-http:inbound-gateway 
-	           request-channel="httpRequestChannel"
-	           reply-channel="httpReplyChannel" 
-	           supported-methods="GET"
-	           extract-reply-payload="true"
-	           path="/add.php">
-	       <int-http:request-mapping 
-	           
-			     
-			     produces="application/json"/>
-	</int-http:inbound-gateway>
-	
-	<int:channel id="httpRequestChannel">
-	   <int:interceptors>
-	      <int:wire-tap channel="logging"/>
-	    </int:interceptors>
-	</int:channel>
-    <int:channel id="httpReplyChannel" >
-        <int:interceptors>
-          <int:wire-tap channel="logging"/>
-        </int:interceptors>
-    </int:channel>
-	
-	<int:service-activator ref="httpInboundEndpoint"
-        method="get" input-channel="httpRequestChannel" output-channel="httpReplyChannel" />
-        
-    <bean id="httpInboundEndpoint" 
-          class="com.apu.TcpServerForAccessControl.endpoint.HttpInboundEndpoint"/>
--->                      
+                
 	<!-- Server side -->
-
 	<int-ip:tcp-connection-factory id="crLfServer"
 								   type="server"
 								   port="65530"
