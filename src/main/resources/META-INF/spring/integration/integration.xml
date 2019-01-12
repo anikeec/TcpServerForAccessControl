@@ -52,7 +52,7 @@
         
     <bean id="httpInboundEndpoint" 
           class="com.apu.TcpServerForAccessControl.endpoint.HttpInboundEndpoint"/>
-     -->                            
+-->                      
 	<!-- Server side -->
 
 	<int-ip:tcp-connection-factory id="crLfServer"

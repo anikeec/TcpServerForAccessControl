@@ -12,7 +12,7 @@ import org.bouncycastle.crypto.params.KeyParameter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 public class GOST28147Encription {
     
 //    @Value("${tcp-server-ac.security.key}")
