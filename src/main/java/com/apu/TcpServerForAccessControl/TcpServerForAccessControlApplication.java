@@ -6,7 +6,6 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 //import org.springframework.cache.annotation.EnableCaching;
@@ -18,9 +17,6 @@ import com.apu.TcpServerForAccessControl.logging.LoggingOutputStream;
 
 @SpringBootApplication
 //@EnableCaching
-//(scanBasePackages = {"com.apu.TcpServerForAccessControl.utils", "com.apu.TcpServerForAccessControlDB.entity"})
-//@EnableJpaRepositories(basePackageClasses=com.apu.TcpServerForAccessControlDB.repository.AccessMessageRepository.class)
-//@EnableAutoConfiguration
 @EnableJpaRepositories(basePackages= {"com.apu.TcpServerForAccessControlDB.repository"})
 //@EnableMongoRepositories(basePackages= {"com.apu.TcpServerForAccessControlMongoDB.repository"})
 @EntityScan(basePackages = {"com.apu.TcpServerForAccessControlDB.entity"}) 

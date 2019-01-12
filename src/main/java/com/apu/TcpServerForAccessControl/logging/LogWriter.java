@@ -13,7 +13,6 @@ public class LogWriter {
         String msg = null;
         msg = "Logger Message: " + message;
         logger.info(msg);
-//        return msg;
     }
 
 }
