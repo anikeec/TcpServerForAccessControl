@@ -17,68 +17,45 @@
 	<context:property-placeholder/>
 	
 <!-- 	<cache:annotation-driven /> -->
+
     <int:logging-channel-adapter id="logging" log-full-message="true" level="TRACE"/>
                 
-	<!-- Server side -->
 	<int-ip:tcp-connection-factory id="crLfServer"
 								   type="server"
 								   port="65530"
 								   using-nio="true"
 								   lookup-host="false"									   		   
-								   />								   
-    
-    <int-ip:tcp-outbound-channel-adapter id="outboundServer"
-        channel="tcpOutputChannel"
-        connection-factory="crLfServer"/>
+								   />	
+								   
+	<int-ip:tcp-inbound-channel-adapter id="inboundServer"
+                           channel="tcpInputChannel"
+                           error-channel="errorChannel"
+                           connection-factory="crLfServer"/>					   
         
-    <int:channel id="tcpOutputChannel"/>
-    
-    <int:chain input-channel="toTcpClient" output-channel="tcpOutputChannel">
-        <int:transformer ref="messageConverter" method="convertBack"/>
-       <int:transformer ref="messageDecoder" method="encode"/>       
+    <int:channel id="tcpInputChannel"/> 
+
+    <int:chain input-channel="tcpInputChannel" output-channel="toEngineChannel">
+       <int:transformer ref="messageChecker" method="check"/>
+       <int:transformer ref="messageDecoder" method="decode"/>
+       <int:transformer ref="messageConverter" method="convert"/>
     </int:chain>
      
-    <int:channel id="toTcpClient"/>  
-
-	
-	<int-ip:tcp-inbound-channel-adapter id="inboundServer"
-	    channel="tcpInputChannel"
-	    error-channel="errorChannel"
-	    connection-factory="crLfServer"/>
-
-	<int:channel id="tcpInputChannel"/>
+    <int:channel id="toEngineChannel"/>
+     
+    <int:payload-type-router input-channel="toEngineChannel">
+       <int:mapping type="com.apu.TcpServerForAccessControlAPI.packet.ServicePacket" 
+                                    channel="toServiceEngineChannel" />
+       <int:mapping type="com.apu.TcpServerForAccessControlAPI.packet.InfoPacket" 
+                                    channel="toInfoEngineChannel" />
+       <int:mapping type="com.apu.TcpServerForAccessControlAPI.packet.AccessPacket" 
+                                    channel="toAccessEngineChannel" />
+    </int:payload-type-router>
     
-    <bean id="jsonSerializer" 
-          class="com.apu.TcpServerForAccessControl.converter.JsonSerializer"/>                                   
-	
-	<int:chain input-channel="tcpInputChannel" output-channel="toEngineChannel">
-	   <int:transformer ref="messageChecker" method="check"/>
-	   <int:transformer ref="messageDecoder" method="decode"/>
-	   <int:transformer ref="messageConverter" method="convert"/>
-	 </int:chain>
-	 
-	 <int:channel id="toEngineChannel"/>
-	
-	<bean id="messageChecker"
-          class="com.apu.TcpServerForAccessControl.message.MessageChecker"/>
-	
-	<bean id="messageDecoder"
-          class="com.apu.TcpServerForAccessControl.message.MessageDecoder"/>
-          
-    <bean id="messageConverter"
-          class="com.apu.TcpServerForAccessControl.message.MessageConverter"/>	
-	
-	<int:payload-type-router input-channel="toEngineChannel">
-	    <int:mapping type="com.apu.TcpServerForAccessControlAPI.packet.ServicePacket" channel="toServiceEngineChannel" />
-	    <int:mapping type="com.apu.TcpServerForAccessControlAPI.packet.InfoPacket" channel="toInfoEngineChannel" />
-	    <int:mapping type="com.apu.TcpServerForAccessControlAPI.packet.AccessPacket" channel="toAccessEngineChannel" />
-	</int:payload-type-router>
-	
-	
-	<int:channel id="toServiceEngineChannel"/>
-	
-	<int:service-activator input-channel="toServiceEngineChannel"
-	                       output-channel="toTcpClient"
+    
+    <int:channel id="toServiceEngineChannel"/>
+    
+    <int:service-activator input-channel="toServiceEngineChannel"
+                           output-channel="toTcpClient"
                            ref="serviceRulesEngine"
                            method="engine"
                            order="2"/>
@@ -92,6 +69,7 @@
                            method="engine"
                            order="3"/>
                            
+                           
     <int:channel id="toAccessEngineChannel"/>
     
     <int:service-activator input-channel="toAccessEngineChannel"
@@ -99,7 +77,45 @@
                            ref="accessRulesEngine"
                            method="engine"
                            order="1"/>
+    
+    <int:channel id="toTcpClient"/>
+  
+    <int:chain input-channel="toTcpClient" output-channel="tcpOutputChannel">
+        <int:transformer ref="messageConverter" method="convertBack"/>
+        <int:transformer ref="messageDecoder" method="encode"/>       
+    </int:chain>
+        
+    <int:channel id="tcpOutputChannel"/>
+    
+    <int-ip:tcp-outbound-channel-adapter id="outboundServer"
+                                    channel="tcpOutputChannel"
+                                    connection-factory="crLfServer"/>
+    
+    
+    <int:channel id="errorChannel"/>
+                     
+    <int:service-activator input-channel="errorChannel" ref="errorHandler" method="handle"/>
+      
+
+    <int:channel id="toLogging"/>
+    
+    <int:service-activator input-channel="toLogging"
+                                    ref="logWriter"
+                                    method="writeToLog"/>
+
+
+    <bean id="jsonSerializer" 
+          class="com.apu.TcpServerForAccessControl.converter.JsonSerializer"/>                                   
 	
+	<bean id="messageChecker"
+          class="com.apu.TcpServerForAccessControl.message.MessageChecker"/>
+	
+	<bean id="messageDecoder"
+          class="com.apu.TcpServerForAccessControl.message.MessageDecoder"/>
+          
+    <bean id="messageConverter"
+          class="com.apu.TcpServerForAccessControl.message.MessageConverter"/>	
+
 	<bean id="serviceRulesEngine"
           class="com.apu.TcpServerForAccessControl.engine.ServiceRulesEngine"/>
 	
@@ -108,24 +124,13 @@
           
     <bean id="accessRulesEngine"
           class="com.apu.TcpServerForAccessControl.engine.AccessRulesEngine"/>  
-         
-          
-    <int:channel id="toLogging"/>
-    
-    <int:service-activator input-channel="toLogging"
-                           ref="logWriter"
-                           method="writeToLog"/>
-                           
+            
+    <bean id="errorHandler"
+         class="com.apu.TcpServerForAccessControl.message.ErrorHandler"/>
+                    
     <bean id="logWriter"
           class="com.apu.TcpServerForAccessControl.logging.LogWriter"/>
 
-	<int:channel id="errorChannel"/>
-					 
-	<int:service-activator input-channel="errorChannel" ref="errorHandler" method="handle"/>
-					 
-    <bean id="errorHandler"
-         class="com.apu.TcpServerForAccessControl.message.ErrorHandler"/>
-	
     <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
         <property name="driverClassName" value="org.postgresql.Driver" />
         <property name="jdbcUrl" value="jdbc:postgresql://localhost:5432/accesscontroldb" /><!-- 192.168.0.11 -->
