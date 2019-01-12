@@ -10,12 +10,10 @@ public class MessageDecoder {
     private static final Logger logger = LogManager.getLogger(MessageDecoder.class);
     
     public byte[] decode(byte[] message) {
-//        logger.info("Time: " + System.currentTimeMillis() + " ms.");
         return message;
     }
     
     public byte[] encode(byte[] message) {
-//        logger.info("Time: " + System.currentTimeMillis() + " ms.");
         return message;
     }
 

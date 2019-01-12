@@ -10,17 +10,17 @@ public class ErrorHandler {
     private static final Logger logger = LogManager.getLogger(ErrorHandler.class);
 
     public byte[] handle(byte[] message) {
-        logger.info("Error: " + message);
+        logger.error("Error: " + message);
         return message;
     }
 
     public Object handle(Object message) {
-        logger.info("Error: " + message);
+        logger.error("Error: " + message);
         return message;
     }
 
     public String handle(String message) {
-        logger.info("Error: " + message);
+        logger.error("Error: " + message);
         return message;
     }
 
