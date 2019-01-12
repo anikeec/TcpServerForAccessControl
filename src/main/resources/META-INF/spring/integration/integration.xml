@@ -125,14 +125,6 @@
 					 
     <bean id="errorHandler"
          class="com.apu.TcpServerForAccessControl.message.ErrorHandler"/>
-					 
-<!-- 	<bean id="dataSource" destroy-method="close" class="org.apache.commons.dbcp2.BasicDataSource"> -->
-<!-- 	    <property name="driverClassName" value="org.postgresql.Driver"/> -->
-<!-- 	    <property name="url" value="jdbc:postgresql://localhost:5432/accesscontroldb"/> -->
-<!-- 	    <property name="username" value="postgres"/> -->
-<!-- 	    <property name="password" value=""/> -->
-<!-- 	    <property name="initialSize" value="5"/> -->
-<!-- 	</bean>	 -->
 	
     <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
         <property name="driverClassName" value="org.postgresql.Driver" />
